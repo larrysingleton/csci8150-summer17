@@ -5,11 +5,10 @@ int parseTestFile(FILE *file) {
     return OK;
 }
 
-int preLoadInstructionCache(char *testFile) {
+int preLoadInstructionCache(const char *testFile) {
     FILE *file;
 
     printf("\nLoading instruction cache from: %s", testFile);
-
     if (file = fopen(testFile, "r")) {
         parseTestFile(file);
         fclose(file);

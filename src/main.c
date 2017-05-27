@@ -1,18 +1,13 @@
 #include "main.h"
 
 int main(int argc, char *argv[]) {
-    int time = 1;   // Keeps track of time, 1 unit of time equals 1 clock cylce.
+    int time = 1;   // Keeps track of time, 1 unit of time equals 1 clock cycle.
 
     printf("\n Memory Subsystem starting...\n");
 
     if (argc!=2) {
         printf("\nMissing test case argument");
         printf("\nUsage: %s [test1 | test2 | test3]", basename(argv[0]));
-        return ERR;
-    }
-
-    if (!access(argv[1], F_OK))  {
-        printf("\nTest case not found: %s", argv[1]);
         return ERR;
     }
 

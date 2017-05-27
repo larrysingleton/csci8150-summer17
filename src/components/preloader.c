@@ -1,7 +1,16 @@
 #include "main.h"
 
 int parseTestFile(FILE *file) {
-    // TODO - parse file into instruction cache
+    char *line=NULL;
+    size_t len=0;
+    int pc = 0;
+
+    while (getline(&line, &len, file) != -1) {
+        if (line[0] != '#') {
+            printf("\nRead line: %s", line);
+            // TODO: load value into instruction cache
+        }
+    }
     return OK;
 }
 

@@ -1,8 +1,7 @@
 #include "main.h"
 
 int main(int argc, char *argv[]) {
-    int time = 1;   // Keeps track of time, 1 unit of time equals 1 clock cylce.
-    char testFile[80] = "../../test/";
+    int time = 1;   // Keeps track of time, 1 unit of time equals 1 clock cycle.
 
     printf("\n Memory Subsystem starting...\n");
 
@@ -12,13 +11,7 @@ int main(int argc, char *argv[]) {
         return ERR;
     }
 
-    strcat(testFile, argv[1]);
-    if (!access(testFile, F_OK))  {
-        printf("\nTest case not found: %s", testFile);
-        return ERR;
-    }
-
-    if (preLoadInstructionCache(testFile) != OK) {
+    if (preLoadInstructionCache(argv[1]) != OK) {
         return ERR;
     }
 

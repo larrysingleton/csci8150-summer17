@@ -7,6 +7,6 @@ void L1();
 void L2();
 void MEM();
 
-int preLoadInstructionCache(char *testFile);
+int preLoadInstructionCache(const char *testFile);
 
 #endif //CSCI8150_COMPONENTS_H

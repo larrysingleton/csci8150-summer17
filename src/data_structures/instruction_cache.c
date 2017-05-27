@@ -1,4 +1,4 @@
-#include <main.h>
+#include "main.h"
 
 instruction* instructionCache[INS_CACHE_ROWS][INS_CACHE_CELLS];
 

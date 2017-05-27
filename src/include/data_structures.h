@@ -1,7 +1,5 @@
-
 #ifndef CSCI8150_DATA_STRUCTURES_H_H
 #define CSCI8150_DATA_STRUCTURES_H_H
-
 
 // Each row is 64 bytes, we allocate 64 rows
 // for a total of 512 byte instruction cache

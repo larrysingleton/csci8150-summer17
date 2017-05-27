@@ -11,4 +11,4 @@
 
 typedef unsigned char instruction[INS_SIZE_IN_BYTES]; // An instruction is made up of 8 bytes
 
-#endif //CSCI8700_DATA_STRUCTURES_H_H
+#endif //CSCI8150_DATA_STRUCTURES_H_H

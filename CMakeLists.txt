@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.7)
-project(CSCI8700)
+project(CSCI8150)
 
 set(CMAKE_C_STANDARD 99)
 
@@ -19,4 +19,4 @@ set(SOURCE_FILES
 
 include_directories(src/include)
 
-add_executable(CSCI8700 ${SOURCE_FILES})
+add_executable(CSCI8150 ${SOURCE_FILES})

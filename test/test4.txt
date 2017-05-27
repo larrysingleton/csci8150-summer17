@@ -1,0 +1,3 @@
+# Back-back read/write to different lines
+WRITE 400 d1, READ 400
+WRITE 450 d2, READ 450

@@ -1,0 +1,2 @@
+# Read from L1 victim cache
+READ 500

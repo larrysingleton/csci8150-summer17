@@ -1,0 +1,2 @@
+# Read from L1 WB / L2 WB cache
+READ 600

@@ -1,0 +1,2 @@
+# Single write followed by a read to the same address
+WRITE 200 a, READ 200

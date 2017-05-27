@@ -2,7 +2,7 @@
 
 int main(int argc, char *argv[]) {
     int time = 1;   // Keeps track of time, 1 unit of time equals 1 clock cylce.
-    char testFile[80] = "test/";
+    char testFile[80] = "../../test/";
 
     printf("\n Memory Subsystem starting...\n");
 

@@ -10,7 +10,7 @@ int preLoadInstructionCache(char *testFile) {
 
     printf("\nLoading instruction cache from: %s", testFile);
 
-    if ((file = fopen(testFile, "r"))) {
+    if (file = fopen(testFile, "r")) {
         parseTestFile(file);
         fclose(file);
     } else {

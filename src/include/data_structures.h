@@ -1,6 +1,6 @@
 
-#ifndef CSCI8700_DATA_STRUCTURES_H_H
-#define CSCI8700_DATA_STRUCTURES_H_H
+#ifndef CSCI8150_DATA_STRUCTURES_H_H
+#define CSCI8150_DATA_STRUCTURES_H_H
 
 
 // Each row is 64 bytes, we allocate 64 rows

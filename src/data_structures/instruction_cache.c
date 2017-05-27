@@ -1,6 +1,6 @@
 #include <main.h>
 
-extern instruction* instructionCache[INS_CACHE_ROWS][INS_CACHE_CELLS];
+instruction* instructionCache[INS_CACHE_ROWS][INS_CACHE_CELLS];
 
 /* Macro used to decode the cache row from a program counter */
 #define row(programCounter)  (programCounter / INS_CACHE_CELLS)

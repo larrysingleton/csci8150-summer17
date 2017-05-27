@@ -1,0 +1,8 @@
+//
+// Created by cazam on 5/27/2017.
+//
+
+#ifndef CSCI8700_DATA_STRUCTURES_H_H
+#define CSCI8700_DATA_STRUCTURES_H_H
+
+#endif //CSCI8700_DATA_STRUCTURES_H_H

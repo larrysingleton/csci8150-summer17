@@ -1,2 +1,2 @@
-# csci8150-summer17
-Advanced Computer Architecture Project
+# CSCI8700
+CSCI 8700 Term Project

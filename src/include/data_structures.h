@@ -9,4 +9,8 @@
 
 typedef unsigned char instruction[INS_SIZE_IN_BYTES]; // An instruction is made up of 8 bytes
 
+instruction* fetch(int programCounter);
+
+void loadCache(int programCounter, instruction* instructionPointer);
+
 #endif //CSCI8150_DATA_STRUCTURES_H_H

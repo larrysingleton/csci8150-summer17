@@ -1,4 +1,4 @@
-#include "main.h"
+#include <main.h>
 
 int main(int argc, char *argv[]) {
     int time = 1;   // Keeps track of time, 1 unit of time equals 1 clock cycle.
@@ -15,8 +15,9 @@ int main(int argc, char *argv[]) {
         return ERR;
     }
 
+
     //execute CPU cycles until pipline
-    while(time) {
+    while(0) {
 
         CPU();
         L1();

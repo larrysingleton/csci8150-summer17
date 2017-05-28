@@ -1,11 +1,10 @@
 project(src)
 
-include_directories(components)
-include_directories(data_structures)
-include_directories(include)
+include_directories(components
+                    data_structures
+                    include)
 
 set(SOURCE_FILES
-        main.c
         components/level_one_cache_controller.c
         components/level_two_cache_controller.c
         components/memory.c
@@ -13,9 +12,10 @@ set(SOURCE_FILES
         components/processor.c
         components/victim_cache.c
         components/write_buffer.c
-        data_structures/instruction_cache.c
         include/components.h
         include/data_structures.h
-        include/main.h)
+        include/main.h
+        data_structures/instruction_cache.c)
 
-add_executable(CSCI8150 ${SOURCE_FILES})
+add_executable(CSCI8150 ${SOURCE_FILES} main.c)
+add_executable(unit-tests ${SOURCE_FILES} unit-tests/instruction-cache-test.c)

@@ -14,5 +14,6 @@
 
 #define OK 1
 #define ERR -1
+#define DEBUG 1
 
 #endif //CSCI8150_MEMORY_HIERARCHY_H

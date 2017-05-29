@@ -2,6 +2,12 @@
 
 int test_registerFile() {
     char* test = "test char";
-
-    return loadRegister(test);
+    int registerLocation = loadRegister(test);
+    if(registerLocation == -1) {
+        return ERR;
+    }
+    if(strcmp(fetchRegister(registerLocation), "test char") != 0) {
+        return ERR;
+    }
+    return OK;
 }

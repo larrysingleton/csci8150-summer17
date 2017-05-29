@@ -16,6 +16,7 @@ void loadCache(int programCounter, instruction* instructionPointer);
 
 
 // Register File
-int loadRegister(unsigned char* value);
+int loadRegister(const unsigned char* value);
+char* fetchRegister(int registerLocation);
 
 #endif //CSCI8150_DATA_STRUCTURES_H_H

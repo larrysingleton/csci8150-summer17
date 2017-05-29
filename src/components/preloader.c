@@ -1,7 +1,5 @@
 #include <main.h>
 
-#define DEBUG 1
-
 int parseTestFile(FILE *file) {
     char *line = NULL;
     char *word = NULL;

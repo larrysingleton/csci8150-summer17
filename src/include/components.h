@@ -2,9 +2,9 @@
 #define CSCI8150_COMPONENTS_H
 
 typedef enum OP_CODE {
-    NOOP = 0,
-    READ = 1,
-    WRITE = 2
+    NOOP = 0x00,
+    READ = 0x01,
+    WRITE = 0x10
 };
 
 void CPU();

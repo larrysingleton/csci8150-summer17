@@ -1,6 +1,6 @@
 #include <main.h>
 
-unsigned char registerFile[2^REGISER_ADDRESS_SIZE][512]; // 1024 rows of 512 bits = 64 KB register
+unsigned char registerFile[2^10][512]; // 1024 rows of 512 bits = 64 KB register
 
 int nextFreeRegister = 0;
 

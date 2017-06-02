@@ -1,5 +1,12 @@
 #include <main.h>
 
+
+enum OP_CODE {
+    NOOP = 0x00,
+    READ = 0x01,
+    WRITE = 0x10
+};
+
 int parseTestFile(FILE *file) {
     char *line = NULL;
     char *word = NULL;
@@ -85,7 +92,7 @@ int preLoadInstructionCache(const char *testFile) {
     }
 
     // TODO - just a check to view the record
-    instruction *instr = fetch(0);
+    char* instr = fetch(0);
 
     return OK;
 }

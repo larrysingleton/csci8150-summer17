@@ -1,20 +1,28 @@
 #include "main.h"
 
+// Instruction Cache, 64 rows to line up for each row in the instructionDataCache
+int instructionCacheController[64];
+// Each row in the controller is 16 bits,
+// Bit 1: valid
+// Bit 2: dirty
+// Bit 3: least recently used
+// Bit 4-9: address of row
+// Bit 10-13: address of instruction in row.
+// So 64 rows of 64 bytes (each row of 64 bytes is broken into 8 sections of 8 bytes each
+char* instructionCacheData[64][8]; // TODO: update this with the correct size cache.
 
-instruction instructionCache[INS_CACHE_ROWS][INS_CACHE_CELLS];
+//TODO: I think we are getting close here, I am just not sure how to store the data part now.
 
-
-
-/* Macro used to decode the cache row from a program counter */
-#define row(programCounter)  (programCounter / INS_CACHE_CELLS)
-/* Macro used to decode the cache row cell from a program counter */
-#define cell(programCounter)  (programCounter % INS_CACHE_CELLS)
-
-instruction* fetch(int programCounter) {
-    // TODO: switch this to lookup the location in the cache from the controller.
-    return &instructionCache[row(programCounter)][cell(programCounter)];
+char * fetch(int programCounter) {
+    int address = instructionCacheController[programCounter];
+    return instructionCacheData[address][1];
 }
 
-void loadCache(int programCounter, instruction* instructionPointer) {
-    *instructionCache[row(programCounter)][cell(programCounter)] = instructionPointer;
+void loadCache(int programCounter, char* instruction) {
+    int cacheMask = 0b100 << 13; // Mask this to the top order bits.
+    int rowMask = programCounter / 8 << 7; // Mask this to bits 4-9 for column
+    int instructionMask = programCounter % 8 <<  3; // Mask bits for cell
+    int instructionCacheAddress = cacheMask | rowMask | instructionMask;
+    instructionCacheController[programCounter] = instructionCacheAddress;
+    instructionCacheData[programCounter / 8][instructionCacheAddress % 8] = instruction; // TODO: this isnt correct.
 }

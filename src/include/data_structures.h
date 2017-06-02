@@ -11,6 +11,8 @@
 
 // Instruction Cache
 typedef unsigned char instruction[INS_SIZE_IN_BYTES]; // An instruction is made up of 8 bytes
+typedef unsigned char controller[64];
+
 instruction* fetch(int programCounter);
 void loadCache(int programCounter, instruction* instructionPointer);
 

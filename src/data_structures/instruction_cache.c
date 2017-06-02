@@ -1,6 +1,9 @@
 #include "main.h"
 
-instruction* instructionCache[INS_CACHE_ROWS][INS_CACHE_CELLS];
+
+instruction instructionCache[INS_CACHE_ROWS][INS_CACHE_CELLS];
+
+
 
 /* Macro used to decode the cache row from a program counter */
 #define row(programCounter)  (programCounter / INS_CACHE_CELLS)
@@ -8,9 +11,10 @@ instruction* instructionCache[INS_CACHE_ROWS][INS_CACHE_CELLS];
 #define cell(programCounter)  (programCounter % INS_CACHE_CELLS)
 
 instruction* fetch(int programCounter) {
-    return instructionCache[row(programCounter)][cell(programCounter)];
+    // TODO: switch this to lookup the location in the cache from the controller.
+    return &instructionCache[row(programCounter)][cell(programCounter)];
 }
 
 void loadCache(int programCounter, instruction* instructionPointer) {
-    instructionCache[row(programCounter)][cell(programCounter)] = instructionPointer;
+    *instructionCache[row(programCounter)][cell(programCounter)] = instructionPointer;
 }

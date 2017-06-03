@@ -8,4 +8,7 @@ void MEM();
 
 int preLoadInstructionCache(const char *testFile);
 
+void getDataCacheData(char * address);
+void getInstructionCacheData(char * address);
+
 #endif //CSCI8150_COMPONENTS_H

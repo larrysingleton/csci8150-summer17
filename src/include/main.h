@@ -7,6 +7,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <malloc.h>
+#include <math.h>
 
 #include <sys/stat.h>
 

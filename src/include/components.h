@@ -10,5 +10,6 @@ int preLoadInstructionCache(const char *testFile);
 
 void getDataCacheData(char * address);
 void getInstructionCacheData(char * address);
+unsigned char packInstruction(char *buf);
 
 #endif //CSCI8150_COMPONENTS_H

@@ -1,11 +1,42 @@
-#include <stdint.h>
+#include <main.h>
 
-// Queues of 8 rows with 8 cells of 8byte instructions (aka each row is 64 bytes).
-struct queues {
-    int64_t cpuToL1[8][8];
-    int64_t L1ToCpu[8][8];
-    int64_t L1ToL2[8][8];
-    int64_t L2ToL1[8][8];
-    int64_t L2ToMem[8][8];
-    int64_t MemToL2[8][8];
+struct Queue {
+    struct Queue* next; //next on the queue
+    double row[8]; //The data in the register
 };
+
+void enqueue(double data[8], struct Queue* front, struct Queue* rear) {
+    struct Queue* temp = (struct Queue*) malloc(sizeof(struct Queue));
+    memcpy(&(temp->row), data, sizeof data);
+    temp->next = NULL;
+    if(front == NULL && rear == NULL) {
+        front = rear = temp;
+    }
+    rear->next = temp;
+    rear = temp;
+}
+
+
+void Dequeue(struct Queue* front, struct Queue* rear) {
+    struct Queue* temp = front;
+    if(front == NULL) {
+        return;
+    }
+    if(front == rear) {
+        front = rear = NULL;
+    }
+    else {
+        front = front->next;
+    }
+    free(temp);
+}
+
+double * Front(struct Queue* front) {
+    if(front == NULL) {
+        return NULL;
+    }
+    return front->row;
+}
+
+
+

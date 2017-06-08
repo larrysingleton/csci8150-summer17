@@ -1,5 +1,3 @@
-
-
 #ifndef CSCI8150_TESTS_H
 #define CSCI8150_TESTS_H
 

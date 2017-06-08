@@ -17,7 +17,7 @@ void enqueue(double data[8], struct Queue* front, struct Queue* rear) {
 }
 
 
-void Dequeue(struct Queue* front, struct Queue* rear) {
+void dequeue(struct Queue* front, struct Queue* rear) {
     struct Queue* temp = front;
     if(front == NULL) {
         return;

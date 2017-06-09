@@ -11,7 +11,7 @@ int main() {
     if(!test_registerFile() == ERR) {
         printf("Failed to validate register file test\n");
     }
-    if(test_memoryLoadByte() == ERR) {
-        printf("Failed to load byte into memory\n");
+    if(test_memoryLoadBlock() == ERR) {
+        printf("Failed to load block into memory\n");
     }
 }

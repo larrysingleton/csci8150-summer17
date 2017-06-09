@@ -13,9 +13,7 @@ int loadRegister(const unsigned char* value);
 char* fetchRegister(int registerLocation);
 
 // Memory
-char fetchMemoryByte(int address);
-void loadMemoryByte(int address, char data);
-void loadMemoryBlock(int address, char* data);
-char* fetchMemoryBlock(int address);
+void loadMemoryBlock(long address, char* data);
+char* fetchMemoryBlock(long address);
 
 #endif //CSCI8150_DATA_STRUCTURES_H_H

@@ -11,6 +11,6 @@ int test_insructionCache_multiValue();
 int test_registerFile();
 
 //memory test
-int test_memoryLoadByte();
+int test_memoryLoadBlock();
 
 #endif //CSCI8150_TESTS_H

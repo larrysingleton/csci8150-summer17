@@ -8,7 +8,10 @@ int main() {
     if(!test_insructionCache_multiValue()) {
         printf("Failed to validate instruction cache multiValue test\n");
     }
-    if(!test_registerFile() == -1) {
+    if(!test_registerFile() == ERR) {
         printf("Failed to validate register file test\n");
+    }
+    if(test_memoryLoadByte() == ERR) {
+        printf("Failed to load byte into memory\n");
     }
 }

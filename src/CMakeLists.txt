@@ -23,7 +23,7 @@ set(TEST_FILES
         unit-tests/instruction-cache-test.c
         unit-tests/register-file-test.c
         unit-tests/test.c
-        unit-tests/tests.h data_structures/queue.c data_structures/level_one_cache.c data_structures/memory.c)
+        unit-tests/tests.h data_structures/queue.c data_structures/level_one_cache.c data_structures/memory.c unit-tests/memory-test.c)
 
 add_executable(CSCI8150 ${SOURCE_FILES} main.c)
 add_executable(unit-tests ${SOURCE_FILES} ${TEST_FILES})

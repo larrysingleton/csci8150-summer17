@@ -17,12 +17,12 @@ int main(int argc, char *argv[]) {
 
     //execute CPU cycles until pipline is empty
     while(1) {
-        if(DEBUG) printf("Beginning clock cycle %d\n", pc);
-        double instruction = fetchInstruction(pc);
+        int64_t instruction = fetchInstruction(pc);
         if(instruction == ERR) { // Invalid instruction, means we have performed all the instructions.
             // TODO: add checks to make sure all queues are empty.
             break;
         }
+        if(DEBUG) printf("Beginning clock cycle %d\n", pc);
         CPU(instruction);
         L1();
         L2();

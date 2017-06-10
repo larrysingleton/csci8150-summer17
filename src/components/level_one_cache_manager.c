@@ -46,7 +46,15 @@ void processCPUToL1C() {
                 // TODO: If there is no data (e.g. missi) send message to L2C, set status to waiting in controller
                 // TODO: If the data in L1D is missing but clean (e.g. missc) send message to L2C, set status to waiting.
                 // TODO: If the data in L1D is missing but dirty (e.g. missd) victimize row, and send message to L2C, set status to waiting
-
+        // TODO: If Write
+            // TODO: If L1 hit
+                // TODO: if in L1D, send a message to L1D
+                // TODO: if in VC, send a message to VC
+                // TODO: if in L1WB, send a message to L1WB
+            // TODO: If L1 miss
+                // TODO: If there is no data (e.g. missi) send message to L2C, set status to waiting in controller
+                // TODO: If the data in L1D is missing but clean (e.g. missc) send message to L2C, set status to waiting.
+                // TODO: If the data in L1D is missing but dirty (e.g. missd) victimize row, and send message to L2C, set status to waiting
         // Remove the processed message.
         dequeue(CPUToL1CFront, CPUToL1CRear);
     }

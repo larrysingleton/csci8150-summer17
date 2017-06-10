@@ -1,27 +1,32 @@
 #include "main.h"
 
+void processL1DToL1C();
+void processVCToL1C();
+void processWBToL1C();
+void processL2CToL1C();
+void processCPUToL1C();
+
 void L1() {
-    // Pull a request from the CPU -> L1 queue
-
-    // Call getData with address
-    victimCache();
-    writeBuffer();
-
-    // Put the result on the appropriate queue.
+    processL1DToL1C();
+    processVCToL1C();
+    processWBToL1C();
+    processL2CToL1C();
+    processCPUToL1C();
 }
 
-void getData(char* address) { //This address argument will change to whatever datastructure the address will actually be passed in
-    if(address) { //starts with 1
-        return getInstructionCacheData(address);
-    } else {
-        return getDataCacheData(address);
-    }
-}
-
-void getDataCacheData(char * address) { //This address argument will change to whatever datastructure the address will actually be passed in
+void processL1DToL1C() {
 
 }
 
-void getInstructionCacheData(char * address) { //This address argument will change to whatever datastructure the address will actually be passed in
+void processVCToL1C() {
+
+}
+void processWBToL1C() {
+
+}
+void processL2CToL1C() {
+
+}
+void processCPUToL1C() {
 
 }

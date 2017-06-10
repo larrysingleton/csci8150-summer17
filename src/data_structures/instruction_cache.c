@@ -9,10 +9,13 @@ int instructionCacheController[64];
 // Bit 4-9: address of row
 // Bit 10-13: address of instruction in row.
 // So 64 rows of 64 bytes (each row of 64 bytes is broken into 8 sections of 8 bytes each
-char* instructionCacheData[64][8];
+double instructionCacheData[64][8];
 
-char* fetch(int programCounter) {
+double fetchInstruction(int programCounter) {
     int controllerData = instructionCacheController[programCounter];
+    if((controllerData >> 15) == 0) {
+        return ERR; // Cache miss
+    }
     int rowMask = 0b0001111110000000;
     int row = controllerData & rowMask;
     int cellMask = 0b0000000001111000;
@@ -20,7 +23,7 @@ char* fetch(int programCounter) {
     return instructionCacheData[row][cell];
 }
 
-void loadCache(int programCounter, char* instruction) {
+void loadInstructionCache(int programCounter, double instruction) {
     int cacheMask = 0b100 << 13; // Mask this to the top order bits.
     int rowMask = programCounter / 8 << 7; // Mask this to bits 4-9 for column
     int instructionMask = programCounter % 8 << 3; // Mask bits for cell

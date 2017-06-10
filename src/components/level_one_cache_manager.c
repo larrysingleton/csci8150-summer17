@@ -2,8 +2,12 @@
 
 void L1() {
     // Pull a request from the CPU -> L1 queue
+
     // Call getData with address
-    // Put the result on the L1 -> CPU queue.
+    victimCache();
+    writeBuffer();
+
+    // Put the result on the appropriate queue.
 }
 
 void getData(char* address) { //This address argument will change to whatever datastructure the address will actually be passed in

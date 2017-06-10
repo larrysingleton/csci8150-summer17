@@ -1,3 +1,2 @@
 # Single read
-READ 000100
-WRITE 000111 abcdefg
+READ 000100 111111

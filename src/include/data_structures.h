@@ -4,12 +4,11 @@
 #define blockSizeInBytes 64
 
 
-char* fetch(int programCounter);
-void loadCache(int programCounter, char instruction[8]);
-
+double fetchInstruction(int programCounter);
+void loadInstructionCache(int programCounter, double instruction);
 
 // Register File
-int loadRegister(const unsigned char* value);
+int loadRegister(char* value);
 char* fetchRegister(int registerLocation);
 
 // Memory

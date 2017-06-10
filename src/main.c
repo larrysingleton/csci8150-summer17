@@ -1,7 +1,7 @@
 #include <main.h>
 
 int main(int argc, char *argv[]) {
-    int time = 1;   // Keeps track of time, 1 unit of time equals 1 clock cycle.
+    int pc = 1;   // Keeps track of time, 1 unit of time equals 1 clock cycle.
 
     printf("\n Memory Subsystem starting...\n");
 
@@ -15,15 +15,18 @@ int main(int argc, char *argv[]) {
         return ERR;
     }
 
-
-    //execute CPU cycles until pipline
-    while(0) {
-
+    //execute CPU cycles until pipline is empty
+    while(1) {
+        if(DEBUG) printf("Beginning clock cycle %d\n", pc);
+        double instruction = fetchInstruction(pc);
+        if(instruction == ERR) { // Invalid instruction, means we have performed all the instructions.
+            // TODO: add checks to make sure all queues are empty.
+            break;
+        }
         CPU();
         L1();
         L2();
         MEM();
-
-        time++;
+        pc++;
     }
 }

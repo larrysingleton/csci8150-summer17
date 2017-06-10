@@ -1,16 +1,13 @@
-#include "main.h"
+#include <main.h>
 
 // Instruction 8 bytes
 // Bit  opcode
 // Bits 54-63 data/byte enable register address
 // Bits 44-53 cpu address address
-// bits 43-44 op code
+// bits 42-43 op code
 
-enum OP_CODE {
-    NOOP = 0x11,
-    READ = 0x01,
-    WRITE = 0x10
-};
+
+
 
 int parseTestFile(FILE *file) {
     char *line = NULL;
@@ -68,10 +65,10 @@ int parseTestFile(FILE *file) {
         int addressRegister = loadRegister(address);
         int dataRegister = loadRegister(data);
         // load the instruction line into the cache
-        double instruction = op << 20 | (addressRegister << 10) | dataRegister;
-        printf("Instruction data %f\n", instruction);
+        int64_t instruction = op << 20 | (addressRegister << 10) | dataRegister;
+        if(DEBUG) printf("Instruction data %f\n", instruction);
         loadInstructionCache(pc, instruction);
-        printf("Instruction loaded into register %f\n", fetchInstruction(pc));
+        if(DEBUG) printf("Instruction loaded into register %d\n", fetchInstruction(pc));
         pc++;
     }
     return OK;
@@ -80,12 +77,12 @@ int parseTestFile(FILE *file) {
 int preLoadInstructionCache(const char *testFile) {
     FILE *file;
 
-    printf("\nLoading instruction cache from: [%s]", testFile);
+    if(DEBUG) printf("\nLoading instruction cache from: [%s]", testFile);
     if (file = fopen(testFile, "r")) {
         parseTestFile(file);
         fclose(file);
     } else {
-        printf("\nUnable to read test file: %s", testFile);
+        if(DEBUG) printf("\nUnable to read test file: %s", testFile);
         return ERR;
     }
 

@@ -17,13 +17,18 @@ set(SOURCE_FILES
         include/data_structures.h
         include/main.h
         data_structures/register_file.c
-        data_structures/instruction_cache.c)
+        data_structures/instruction_cache.c
+        data_structures/queue.c
+        data_structures/level_one_cache.c
+        data_structures/memory.c
+        data_structures/level_two_cache.c)
 
 set(TEST_FILES
         unit-tests/instruction-cache-test.c
         unit-tests/register-file-test.c
         unit-tests/test.c
-        unit-tests/tests.h data_structures/queue.c data_structures/level_one_cache.c data_structures/memory.c unit-tests/memory-test.c data_structures/level_two_cache.c)
+        unit-tests/tests.h
+        unit-tests/memory-test.c)
 
 add_executable(CSCI8150 ${SOURCE_FILES} main.c)
 add_executable(unit-tests ${SOURCE_FILES} ${TEST_FILES})

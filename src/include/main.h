@@ -8,11 +8,11 @@
 #include <unistd.h>
 #include <malloc.h>
 #include <math.h>
-
+#include <stdint.h>
 #include <sys/stat.h>
 
-#include "components.h"
 #include "data_structures.h"
+#include "components.h"
 
 #define OK 1
 #define ERR -1

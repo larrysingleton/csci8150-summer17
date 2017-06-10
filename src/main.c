@@ -1,7 +1,7 @@
 #include <main.h>
 
 int main(int argc, char *argv[]) {
-    int pc = 1;   // Keeps track of time, 1 unit of time equals 1 clock cycle.
+    int pc = 0;   // Keeps track of time, 1 unit of time equals 1 clock cycle.
 
     printf("\n Memory Subsystem starting...\n");
 
@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
             // TODO: add checks to make sure all queues are empty.
             break;
         }
-        CPU();
+        CPU(instruction);
         L1();
         L2();
         MEM();

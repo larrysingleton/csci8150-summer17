@@ -1,7 +1,7 @@
 #ifndef CSCI8150_COMPONENTS_H
 #define CSCI8150_COMPONENTS_H
 
-void CPU();
+void CPU(int64_t instruction);
 void L1();
 void L2();
 void MEM();
@@ -10,6 +10,7 @@ void writeBuffer();
 
 int preLoadInstructionCache(const char *testFile);
 int parseTestFile(FILE *file);
+
 
 void getDataCacheData(char * address);
 void getInstructionCacheData(char * address);

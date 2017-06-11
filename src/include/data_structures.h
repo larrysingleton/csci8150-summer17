@@ -1,6 +1,8 @@
 #ifndef CSCI8150_DATA_STRUCTURES_H_H
 #define CSCI8150_DATA_STRUCTURES_H_H
 
+#include "main.h"
+
 int64_t fetchInstruction(int programCounter);
 void loadInstructionCache(int programCounter, int64_t instruction);
 
@@ -38,7 +40,7 @@ typedef struct Queue {
     char* row; //The data in the queue
     char* address; // The address of the data that was fetched
     int64_t instruction;
-};
+} queue;
 
 void enqueueCPUToL1C(char* data, char* address, int64_t instruction);
 void dequeueCPUToL1C();

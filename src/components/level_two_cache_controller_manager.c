@@ -2,13 +2,54 @@
 
 void processMemToL2C();
 void processL1ToL2();
+void processL2DToL2C();
+void processL2WBToL2C();
 
 void L2() {
     processMemToL2C();
-    // TODO: Processing response L2D
-    // TODO: Processing response L2WB
+    processL2DToL2C();
+    processL2WBToL2C();
 
     processL1ToL2();
+}
+
+void processL2WBToL2C() {
+    // See if there is anything to process
+    struct Queue* frontItem = frontL2DToL2C();
+    if(frontItem != NULL) {
+        // Print Status
+        printf("L2C To L1C: Data(%s)\n", frontItem->address);
+        // Forward data onto CPU.
+        enqueueL2CToL1C(frontItem->row,
+                        frontItem->address,
+                        frontItem->instruction);
+
+        printf("L2C To L2D: Data(%s)\n", frontItem->address);
+        enqueueL2CToL2D(frontItem->row,
+                        frontItem->address,
+                        frontItem->instruction);
+
+        // TODO: remove data from L2WB
+
+        //remove the message from the queue
+        dequeueL2WBToL2C();
+    }
+}
+
+void processL2DToL2C() {
+    // See if there is anything to process
+    struct Queue* frontItem = frontL2DToL2C();
+    if(frontItem != NULL) {
+        // Print Status
+        printf("L2C To L1C: Data(%s)\n", frontItem->address);
+        // Forward data onto CPU.
+        enqueueL2CToL1C(frontItem->row,
+                        frontItem->address,
+                        frontItem->instruction);
+
+        //remove the message from the queue
+        dequeueL2DToL2C();
+    }
 }
 
 void processMemToL2C() {
@@ -22,8 +63,11 @@ void processMemToL2C() {
                         frontItem->address,
                         frontItem->instruction);
 
-        // TODO: Forward data to L2D
         printf("L2C To L2D: Data(%s)\n", frontItem->address);
+
+        enqueueL2CToL2D(frontItem->row,
+                        frontItem->address,
+                        frontItem->instruction);
 
         //remove the message from the queue
         dequeueMemToL2C();

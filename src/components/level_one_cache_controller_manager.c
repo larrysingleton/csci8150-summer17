@@ -28,7 +28,9 @@ void processReturnValuesVCToL1C() {
                         frontItem->address,
                         frontItem->instruction);
 
+        printf("L1C To L1D: Data(%s)\n", frontItem->address);
         // TODO: Forward data to L1D
+        // TODO: evict data from VC.
 
         //remove the message from the queue
         dequeueVCToL1C();
@@ -37,16 +39,18 @@ void processReturnValuesVCToL1C() {
 
 void processReturnValuesL1WBToL1C() {
     // See if there is anything in the queue.
-    struct Queue *freeItem = frontL1WBToL1C();
-    if(freeItem != NULL) {
+    struct Queue *frontItem = frontL1WBToL1C();
+    if(frontItem != NULL) {
         // Print Status
-        printf("L1C To CPU: Data(%s)\n", freeItem->address);
+        printf("L1C To CPU: Data(%s)\n", frontItem->address);
         // Forward data onto CPU.
-        enqueueL1CToCPU(freeItem->row,
-                        freeItem->address,
-                        freeItem->instruction);
+        enqueueL1CToCPU(frontItem->row,
+                        frontItem->address,
+                        frontItem->instruction);
 
+        printf("L1C To L1D: Data(%s)\n", frontItem->address);
         // TODO: Forward data to L1D
+        //TODO: evic data from WB
 
         //remove the message from the queue
         dequeueL1WBToL1C();

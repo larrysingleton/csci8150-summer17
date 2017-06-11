@@ -11,6 +11,8 @@ void L2() {
     processL2WBToL2C();
 
     processL1ToL2();
+    levelTwoWriteBuffer();
+
 }
 
 void processL2WBToL2C() {
@@ -29,7 +31,8 @@ void processL2WBToL2C() {
                         frontItem->address,
                         frontItem->instruction);
 
-        // TODO: remove data from L2WB
+        evictFromL2WB((int) strtoll(frontItem->address, NULL, 2));
+
 
         //remove the message from the queue
         dequeueL2WBToL2C();
@@ -78,29 +81,33 @@ void processL1ToL2() {
     // See if there is anything to process
     struct Queue* frontItem = frontL1CToL2C();
     if(frontItem != NULL) {
-        int address = atoi(frontItem->address);
+        int address = (int) strtoll(frontItem->address, NULL, 2);
         int inL2Cache = isInL2Cache(address);
         if (inL2Cache == HIT) {
             // If it is in L1D then enqueue a message to fetch that data.
             if(frontItem->instruction >> 20 == READ) {
                 printf("L2C to L2D: Hit, Read(%s)\n", frontItem->address);
+                enqueueL2CToL2D(NULL,
+                                frontItem->address,
+                                frontItem->instruction);
             } else {
                 printf("L2C to L2D: Hit, Write (%s)\n", frontItem->address);
+                enqueueL2CToL2D(frontItem->row,
+                                frontItem->address,
+                                frontItem->instruction);
             }
-
-            enqueueL2CToL2D(frontItem->row,
-                            frontItem->address,
-                            frontItem->instruction);
         } else if(isInL2WB(address)) {
             if(frontItem->instruction >> 20 == READ) {
                 printf("L2C to WB: Hit, Read(%s)\n", frontItem->address);
+                enqueueL1CToL1WB(NULL,
+                                 frontItem->address,
+                                 frontItem->instruction);
             } else {
                 printf("L2C to WB: Hit, Write(%s)\n", frontItem->address);
+                enqueueL1CToL1WB(frontItem->row,
+                                 frontItem->address,
+                                 frontItem->instruction);
             }
-
-            enqueueL1CToL1WB(frontItem->row,
-                             frontItem->address,
-                             frontItem->instruction);
         } else { // Cache miss
             if (inL2Cache == MISS_D) {
                 printf("L2C to L2D: Miss, Victimize(%s)\n", frontItem->address);
@@ -112,7 +119,7 @@ void processL1ToL2() {
                 printf("L2C to MEM: Miss, Write(%s)\n", frontItem->address);
             }
 
-            enqueueL2CToMem(frontItem->row,
+            enqueueL2CToMem(NULL,
                             frontItem->address,
                             frontItem->instruction);
 

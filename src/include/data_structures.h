@@ -21,10 +21,15 @@ void setL1RowWaiting(int address);
 
 // Victim cache
 int isInVC(int address);
+void loadVC(int address, char* data);
+char* fetchFromVC(int address);
+void evictFromVC(int address);
 
 // L1 Writebuffer
 int isInL1WB(int address);
 void loadL1WB(int address, char* data);
+void evictFromL1WB(int address);
+char* fetchFromL1WB(int address);
 
 // L2 Cache
 int isInL2Cache(int address);
@@ -33,6 +38,8 @@ void setL2RowWaiting(int address);
 // L2 WriteBuffer
 int isInL2WB(int address);
 void loadL2WB(int address, char* data);
+char* fetchFromL2WB(int address);
+void evictFromL2WB(int address);
 
 //Queues
 typedef struct Queue {

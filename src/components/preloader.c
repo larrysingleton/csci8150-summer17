@@ -6,9 +6,6 @@
 // Bits 44-53 cpu address address
 // bits 42-43 op code
 
-
-
-
 int parseTestFile(FILE *file) {
     char *line = NULL;
     char *word = NULL;

@@ -21,3 +21,22 @@ void loadL1WB(int address, char* data) {
         cache[1] = data;
     }
 }
+
+void evictFromL1WB(int address) {
+    if((l1WBController[0] >> 1) == address) {
+        l1WBController[0] = 0;
+    } else {
+        l1WBController[1] = 0;
+    }
+}
+
+
+char* fetchFromL1WB(int address) {
+    if((l1WBController[0] >> 1) == address) {
+        l1WBController[0] = address << 1 | 1; // Set LRU bit
+        return cache[0];
+    } else {
+        l1WBController[1] = address << 1 | 1; // Set LRU bit
+        return cache[1];
+    }
+}

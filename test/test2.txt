@@ -1,3 +1,2 @@
 # Single write followed by a read to the same address
 WRITE 00010000000 a
-READ 00010000000 111111

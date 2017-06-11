@@ -13,8 +13,8 @@ void CPU(int pc) {
 
 void processInstruction(int64_t instruction) {
     enum OP_CODE operation = (enum OP_CODE) instruction >> 20; // Extract opcode from instruction.
-    int addressRegisterLocation = (operation >> 10) & 0b001111111111;
-    int dataRegisterLocation = (operation) & 0b0000000000001111111111;
+    int addressRegisterLocation = (int) (instruction >> 10) & 0b001111111111;
+    int dataRegisterLocation = (int) instruction & 0b0000000000001111111111;
     if(operation == READ) {
         printf("CPU to L1C: CPURead(%s)\n", fetchRegister(addressRegisterLocation));
     } else if(operation == WRITE) {

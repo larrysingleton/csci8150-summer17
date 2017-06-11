@@ -32,8 +32,11 @@ void processReturnValuesVCToL1C() {
                         frontItem->instruction);
 
         printf("L1C To L1D: Data(%s)\n", frontItem->address);
-        // TODO: Forward data to L1D
-        // TODO: evict data from VC.
+        enqueueL1CToL1D(frontItem->row,
+                        frontItem->address,
+                        frontItem->instruction);
+
+        evictFromVC((int) strtoll(frontItem->address, NULL, 2));
 
         //remove the message from the queue
         dequeueVCToL1C();
@@ -52,8 +55,11 @@ void processReturnValuesL1WBToL1C() {
                         frontItem->instruction);
 
         printf("L1C To L1D: Data(%s)\n", frontItem->address);
-        // TODO: Forward data to L1D
-        //TODO: evic data from WB
+        enqueueL1CToL1D(frontItem->row,
+                        frontItem->address,
+                        frontItem->instruction);
+
+        evictFromL1WB((int) strtoll(frontItem->address, NULL, 2));
 
         //remove the message from the queue
         dequeueL1WBToL1C();
@@ -71,8 +77,6 @@ void processReturnValuesL1DToL1C() {
                         frontItem->address,
                         frontItem->instruction);
 
-        // TODO: Forward data to L1D
-
         //remove the message from the queue
         dequeueL1DToL1C();
     }
@@ -89,7 +93,10 @@ void processReturnValuesL2CToL1C() {
                         frontItem->address,
                         frontItem->instruction);
 
-        // TODO: Forward data to L1D
+        printf("L1C To L1D: Data(%s)\n", frontItem->address);
+        enqueueL1CToL1D(frontItem->row,
+                        frontItem->address,
+                        frontItem->instruction);
 
         //remove the message from the queue
         dequeueL2CToL1C();
@@ -100,19 +107,23 @@ void processCPUToL1C() {
     // See if there is anything to process
     struct Queue *frontItem = frontCPUToL1C();
     if(frontItem != NULL) {
-        int address = atoi(frontItem->address);
+        int address = (int) strtoll(frontItem->address, NULL, 2);
         int inL1Cache = isInL1Cache(address);
         if (inL1Cache == HIT) {
             // If it is in L1D then enqueue a message to fetch that data.
             if(frontItem->instruction >> 20 == READ) {
                 printf("L1C to L1D: Hit, Read(%s)\n", frontItem->address);
+                enqueueL1CToL1D(NULL,
+                                frontItem->address,
+                                frontItem->instruction);
             } else {
                 printf("L1C to L1D: Hit, Write (%s)\n", frontItem->address);
+                enqueueL1CToL1D(frontItem->row,
+                                frontItem->address,
+                                frontItem->instruction);
             }
 
-            enqueueL1CToL1D(frontItem->row,
-                    frontItem->address,
-                    frontItem->instruction);
+
         } else if(isInVC(address) == 1) {
             // Basically no matter what all we ever do is read from the victim cache.
             if(frontItem->instruction >> 20 == READ) {
@@ -121,19 +132,21 @@ void processCPUToL1C() {
                 printf("L1C to VC: Hit, Read(%s) for Write\n", frontItem->address);
             }
 
-            enqueueL1CToVC(frontItem->row,
-                    frontItem->address,
-                    frontItem->instruction);
+            enqueueL1CToVC(NULL,
+                        frontItem->address,
+                        frontItem->instruction);
         } else if(isInL1WB(address) == 1) {
             if(frontItem->instruction >> 20 == READ) {
                 printf("L1C to WB: Hit, Read(%s)\n", frontItem->address);
+                enqueueL1CToL1WB(NULL,
+                                 frontItem->address,
+                                 frontItem->instruction);
             } else {
                 printf("L1C to WB: Hit, Write(%s)\n", frontItem->address);
+                enqueueL1CToL1WB(frontItem->row,
+                                 frontItem->address,
+                                 frontItem->instruction);
             }
-
-            enqueueL1CToL1WB(frontItem->row,
-                    frontItem->address,
-                    frontItem->instruction);
         } else { // Cache miss
             if (inL1Cache == MISS_D) {
                 printf("L1C to L1D: Miss, Victimize(%s)\n", frontItem->address);
@@ -141,25 +154,18 @@ void processCPUToL1C() {
             }
             if(frontItem->instruction >> 20 == READ) {
                 printf("L1C to L2C: Miss, Read(%s)\n", frontItem->address);
+                enqueueL1CToL2C(NULL,
+                                frontItem->address,
+                                frontItem->instruction);
             } else {
                 printf("L1C to L2C: Miss, Write(%s)\n", frontItem->address);
+                enqueueL1CToL2C(frontItem->row,
+                                frontItem->address,
+                                frontItem->instruction);
             }
-
-            enqueueL1CToL2C(frontItem->row,
-                    frontItem->address,
-                    frontItem->instruction);
-
             setL1RowWaiting(address);
         }
         // Remove the processed message.
         dequeueCPUToL1C();
     }
-}
-
-char* getMaskedData(int64_t instruction, char* data) {
-    //TODO: instruction & last 10bits
-    //TODO: value from steup one will be the location in the register of the mask
-    //TODO: parse the register value into an integer (atoi(string))
-    //TODO: extract the specified byte from data (it will be up to 64 bytes long)
-    //TODO: return the extracted value.
 }

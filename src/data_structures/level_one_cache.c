@@ -54,6 +54,6 @@ void victimizeL1(int address) {
 
 }
 
-void setL1RowWaitingL2(int address) {
+void setL1RowWaiting(int address) {
 
 }

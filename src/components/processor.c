@@ -15,12 +15,12 @@ void processInstruction(int64_t instruction) {
     if(operation == READ) {
         printf("CPU to L1C: CPURead(%s)\n", fetchRegister(addressRegisterLocation));
     } else if(operation == WRITE) {
-        printf("CPU to L1C: CPUWrite(%s) Data()\n", fetchRegister(addressRegisterLocation), fetchRegister(dataRegisterLocation));
+        printf("CPU to L1C: CPUWrite(%s) Data(%s)\n", fetchRegister(addressRegisterLocation), fetchRegister(dataRegisterLocation));
     }
 
     // Send request off to L1C
-    enqueueCPUToL1C(fetchRegister(addressRegisterLocation),
-            fetchRegister(dataRegisterLocation),
+    enqueueCPUToL1C(fetchRegister(dataRegisterLocation),
+            fetchRegister(addressRegisterLocation),
             instruction
     );
 }
@@ -29,6 +29,6 @@ void processCPUIncoming() {
     struct Queue* l1CToCPUFront = frontCPUToL1C();
     if(l1CToCPUFront != NULL) { // If there is data on the queue to read.
         printf("CPU:       \taddress: '%s'\tvalue: '%s'\n", l1CToCPUFront->address, l1CToCPUFront->row);
-        //dequeue(L1CToCPUFront, L1CToCPURear);
+        dequeueL1CToCPU();
     }
 }

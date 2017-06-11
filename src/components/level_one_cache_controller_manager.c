@@ -102,7 +102,7 @@ void processCPUToL1C() {
             enqueueL1CToL1D(frontItem->row,
                     frontItem->address,
                     frontItem->instruction);
-        } else if(isInVC(address)) {
+        } else if(isInVC(address) == 1) {
             // Basically no matter what all we ever do is read from the victim cache.
             if(frontCPUToL1C()->instruction >> 20 == READ) {
                 printf("L1C to VC: Hit, Read(%s)\n", frontItem->address);
@@ -113,7 +113,7 @@ void processCPUToL1C() {
             enqueueL1CToVC(frontItem->row,
                     frontItem->address,
                     frontItem->instruction);
-        } else if(isInL1WB(address)) {
+        } else if(isInL1WB(address) == 1) {
             if(frontItem->instruction >> 20 == READ) {
                 printf("L1C to WB: Hit, Read(%s)\n", frontItem->address);
             } else {
@@ -138,7 +138,7 @@ void processCPUToL1C() {
                     frontItem->address,
                     frontItem->instruction);
 
-            setL1RowWaitingL2(address);
+            setL1RowWaiting(address);
         }
         // Remove the processed message.
         dequeueCPUToL1C();

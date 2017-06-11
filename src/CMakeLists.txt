@@ -2,12 +2,11 @@ project(src)
 
 include_directories(components
                     data_structures
-                    include
-                    unit-tests)
+                    include)
 
 set(SOURCE_FILES
-        components/level_one_cache_manager.c
-        components/level_two_cache_manager.c
+        components/level_one_cache_controller_manager.c
+        components/level_two_cache_controller_manager.c
         components/memory_manager.c
         components/preloader.c
         components/processor.c
@@ -23,6 +22,7 @@ set(SOURCE_FILES
         data_structures/level_two_cache.c
         data_structures/victim_cache.c
         data_structures/level_one_write_buffer.c
+        data_structures/level_two_write_buffer.c
         data_structures/queues/cpu_to_l1c_queue.c
         data_structures/queues/l1d_to_l1c_queue.c
         data_structures/queues/vc_to_l1c_queue.c
@@ -40,12 +40,4 @@ set(SOURCE_FILES
         data_structures/queues/l2wb_to_l2c_queueu.c
         data_structures/queues/mem_to_l2c_queue.c)
 
-set(TEST_FILES
-        unit-tests/instruction-cache-test.c
-        unit-tests/register-file-test.c
-        unit-tests/test.c
-        unit-tests/tests.h
-        unit-tests/memory-test.c)
-
 add_executable(CSCI8150 ${SOURCE_FILES} main.c)
-add_executable(unit-tests ${SOURCE_FILES} ${TEST_FILES})

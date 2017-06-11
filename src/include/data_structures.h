@@ -15,13 +15,22 @@ char* fetchMemoryBlock(int address);
 // L1 Cache
 int isInL1Cache(int address);
 void victimizeL1(int address);
-void setL1RowWaitingL2(int address);
+void setL1RowWaiting(int address);
 
 // Victim cache
 int isInVC(int address);
 
 // L1 Writebuffer
 int isInL1WB(int address);
+void loadL1WB(int address, char* data);
+
+// L2 Cache
+int isInL2Cache(int address);
+void setL2RowWaiting(int address);
+
+// L2 WriteBuffer
+int isInL2WB(int address);
+void loadL2WB(int address, char* data);
 
 //Queues
 typedef struct Queue {
@@ -100,6 +109,17 @@ enum CHACHE_STATE {
     MISS_C = 1,
     MISS_D = 2,
     HIT = 3
+};
+
+enum L1_TRANS_STATE {
+    RD_WAIT_L1D = 0,
+    RD_WAIT_L2D = 1,
+    RD_WAIT_L1DORL2D = 2,
+    RD_WAIT_L1DANDL2D = 3,
+    WR_WAIT_L2D = 4,
+    WR_WAIT_L1DORL2D = 5,
+    WR_WAIT_L1DANDL2D = 6,
+    WR_ALLOC = 7
 };
 
 enum OP_CODE {

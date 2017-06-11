@@ -39,7 +39,33 @@ void enqueueL1CToCPU(char* data, char* address, int64_t instruction);
 void dequeueL1CToCPU();
 struct Queue* frontCPUToL1C();
 
+void enqueueL1DToL1C(char* data, char* address, int64_t instruction);
+void dequeueL1DToL1C();
+struct Queue* frontL1DToL1C();
 
+void enqueueL1WBToL1C(char* data, char* address, int64_t instruction);
+void dequeueL1WBToL1C();
+struct Queue* frontL1WBToL1C();
+
+void enqueueL2CToL1C(char* data, char* address, int64_t instruction);
+void dequeueL2CToL1C();
+struct Queue* frontL2CToL1C();
+
+void enqueueVCToL1C(char* data, char* address, int64_t instruction);
+void dequeueVCToL1C();
+struct Queue* frontVCToL1C();
+
+void enqueueL1CToL1D(char* data, char* address, int64_t instruction);
+void dequeueL1CToL1D();
+struct Queue* frontL1CToL1D();
+
+void enqueueL1CToVC(char* data, char* address, int64_t instruction);
+void dequeueL1CToVC();
+struct Queue* frontL1CToVC();
+
+void enqueueL1CToL1WB(char* data, char* address, int64_t instruction);
+void dequeueL1CToL1WB();
+struct Queue* frontL1CToL1WB();
 
 enum CHACHE_STATE {
     MISS_I = 0,

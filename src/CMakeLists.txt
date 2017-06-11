@@ -23,7 +23,7 @@ set(SOURCE_FILES
         data_structures/memory.c
         data_structures/level_two_cache.c
         data_structures/victim_cache.c
-        data_structures/level_one_write_buffer.c)
+        data_structures/level_one_write_buffer.c data_structures/l1d_to_l1c_queue.c data_structures/l2c_to_l1c_queue.c data_structures/vc_to_l1c_queue.c data_structures/l1c_to_l1d_queue.c data_structures/l1c_to_vc_queue.c)
 
 set(TEST_FILES
         unit-tests/instruction-cache-test.c

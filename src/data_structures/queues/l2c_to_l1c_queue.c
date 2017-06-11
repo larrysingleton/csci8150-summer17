@@ -9,12 +9,11 @@ void enqueueL2CToL1C(char* data, char* address, int64_t instruction) {
     temp->address = address;
     temp->instruction = instruction;
     temp->next = NULL;
-    if(L2CToL1CFront == NULL) {
-        L2CToL1CFront = temp;
-    } else {
-        L2CToL1CRear->next = temp;
-        L2CToL1CRear = temp;
+    if(L2CToL1CFront == NULL && L2CToL1CRear == NULL) {
+        L2CToL1CFront = L2CToL1CRear = temp;
     }
+    L2CToL1CRear->next = temp;
+    L2CToL1CRear = temp;
 }
 
 void dequeueL2CToL1C() {
@@ -26,7 +25,7 @@ void dequeueL2CToL1C() {
         L2CToL1CFront = L2CToL1CRear = NULL;
     }
     else {
-        L2CToL1CFront = L2CToL1CRear->next;
+        L2CToL1CFront = L2CToL1CFront->next;
     }
     free(temp);
 }

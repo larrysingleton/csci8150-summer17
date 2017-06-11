@@ -9,12 +9,11 @@ void enqueueVCToL1C(char* data, char* address, int64_t instruction) {
     temp->address = address;
     temp->instruction = instruction;
     temp->next = NULL;
-    if(VCToL1CFront == NULL) {
-        VCToL1CFront = temp;
-    } else {
-        VCToL1CFront->next = temp;
-        VCToL1CFront = temp;
+    if(VCToL1CFront == NULL && VCToL1CRear == NULL) {
+        VCToL1CFront = VCToL1CRear = temp;
     }
+    VCToL1CRear->next = temp;
+    VCToL1CRear = temp;
 }
 
 void dequeueVCToL1C() {
@@ -26,7 +25,7 @@ void dequeueVCToL1C() {
         VCToL1CFront = VCToL1CRear = NULL;
     }
     else {
-        VCToL1CFront = VCToL1CRear->next;
+        VCToL1CFront = VCToL1CFront->next;
     }
     free(temp);
 }

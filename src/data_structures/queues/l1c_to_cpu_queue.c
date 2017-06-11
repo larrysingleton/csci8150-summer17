@@ -9,12 +9,11 @@ void enqueueL1CToCPU(char* data, char* address, int64_t instruction) {
     temp->address = address;
     temp->instruction = instruction;
     temp->next = NULL;
-    if(L1CToCPUFront == NULL) {
-        L1CToCPUFront = temp;
-    } else {
-        L1CToCPURear->next = temp;
-        L1CToCPURear = temp;
+    if(L1CToCPUFront == NULL && L1CToCPURear == NULL) {
+        L1CToCPUFront = L1CToCPURear = temp;
     }
+    L1CToCPURear->next = temp;
+    L1CToCPURear = temp;
 }
 
 void dequeueL1CToCPU() {
@@ -26,12 +25,12 @@ void dequeueL1CToCPU() {
         L1CToCPUFront = L1CToCPURear = NULL;
     }
     else {
-        L1CToCPUFront = L1CToCPURear->next;
+        L1CToCPUFront = L1CToCPUFront->next;
     }
     free(temp);
 }
 
-struct Queue* frontCPUToL1C() {
+struct Queue* frontL1CToCPU() {
     return L1CToCPUFront;
 }
 

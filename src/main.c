@@ -1,55 +1,6 @@
 #include <main.h>
 
-struct Queue* L1CToCPUFront;
-struct Queue* L1CToCPURear;
-
-struct Queue* L1DToL1CFront;
-struct Queue* L1DToL1CRear;
-
-struct Queue* L1CToL1DFront;
-struct Queue* L1CToL1DRear;
-
-struct Queue* L1CToVCFront;
-struct Queue* L1CToVCRear;
-
-struct Queue* VCToL1CFront;
-struct Queue* VCToL1CRear;
-
-struct Queue* L1CToL1WBFront;
-struct Queue* L1CToL1WBRear;
-
-struct Queue* L1WBToL1CFront;
-struct Queue* L1WBToL1CRear;
-
-struct Queue* L1CToL2CFront;
-struct Queue* L1CToL2CRear;
-
-struct Queue* L2CToL1CFront;
-struct Queue* L2CToL1CRear;
-
-struct Queue* L2CToL1CFront;
-struct Queue* L2CToL1CRear;
-
-struct Queue* L2CToL2WBFront;
-struct Queue* L2CToL2WBRear;
-
-struct Queue* L2WBToL2CFront;
-struct Queue* L2WBToL2CRear;
-
-struct Queue* L2DToL2CFront;
-struct Queue* L2DToL2CRear;
-
-struct Queue* L2CToL2DFront;
-struct Queue* L2CToL2DRear;
-
-struct Queue* L2CToMemFront;
-struct Queue* L2CToMemRear;
-
-struct Queue* MemToL2CFront;
-struct Queue* MemToL2CRear;
-
-struct Queue* CPUToL1CFront;
-struct Queue* CPUToL1CRear;
+int inProgress();
 
 int main(int argc, char *argv[]) {
     int pc = 0;   // Keeps track of time, 1 unit of time equals 1 clock cycle.
@@ -84,22 +35,22 @@ int main(int argc, char *argv[]) {
 }
 
 int inProgress() {
-    if( L1CToCPUFront != NULL ||
-        CPUToL1CFront != NULL ||
-        L1DToL1CFront != NULL ||
-        L1CToL1DFront != NULL ||
-        L1CToVCFront != NULL ||
-        VCToL1CFront != NULL ||
-        L1CToL1WBFront != NULL ||
-        L1WBToL1CFront != NULL ||
-        L1CToL2CFront != NULL ||
-        L2CToL1CFront != NULL ||
-        L2CToL2WBFront != NULL ||
-        L2WBToL2CFront != NULL ||
-        L2DToL2CFront != NULL ||
-        L2CToL2DFront != NULL ||
-        L2CToMemFront != NULL ||
-        MemToL2CFront != NULL) {
+    if( frontCPUToL1C() != NULL ||
+        frontCPUToL1C() != NULL ||
+        frontL1DToL1C() != NULL ||
+        frontL1CToL1D() != NULL ||
+        frontL1CToVC() != NULL ||
+        frontVCToL1C() != NULL ||
+        frontL1CToL1WB() != NULL ||
+        frontL1WBToL1C() != NULL ||
+        frontL1CToL2C() != NULL ||
+        frontL2CToL1C() != NULL ||
+        frontL2DToL2C() != NULL ||
+        frontL2WBToL2C() != NULL ||
+        frontL2CToL2WB() != NULL ||
+        frontL2CToL2D() != NULL ||
+        frontL2CToMem() != NULL ||
+        frontMemToL2C() != NULL) {
         return OK;
     }
     return ERR;

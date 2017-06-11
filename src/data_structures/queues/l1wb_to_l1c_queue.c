@@ -9,12 +9,11 @@ void enqueueL1WBToL1C(char* data, char* address, int64_t instruction) {
     temp->address = address;
     temp->instruction = instruction;
     temp->next = NULL;
-    if(L1WBToL1CFront == NULL) {
-        L1WBToL1CFront = temp;
-    } else {
-        L1WBToL1CRear->next = temp;
-        L1WBToL1CRear = temp;
+    if(L1WBToL1CFront == NULL && L1WBToL1CRear == NULL) {
+        L1WBToL1CFront = L1WBToL1CRear = temp;
     }
+    L1WBToL1CRear->next = temp;
+    L1WBToL1CRear = temp;
 }
 
 void dequeueL1WBToL1C() {
@@ -26,7 +25,7 @@ void dequeueL1WBToL1C() {
         L1WBToL1CFront = L1WBToL1CRear = NULL;
     }
     else {
-        L1WBToL1CFront = L1WBToL1CRear->next;
+        L1WBToL1CFront = L1WBToL1CFront->next;
     }
     free(temp);
 }

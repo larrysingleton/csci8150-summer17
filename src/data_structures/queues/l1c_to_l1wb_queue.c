@@ -9,15 +9,14 @@ void enqueueL1CToL1WB(char* data, char* address, int64_t instruction) {
     temp->address = address;
     temp->instruction = instruction;
     temp->next = NULL;
-    if(L1CToL1WBFront == NULL) {
-        L1CToL1WBFront = temp;
-    } else {
-        L1CToL1WBRear->next = temp;
-        L1CToL1WBRear = temp;
+    if(L1CToL1WBFront == NULL && L1CToL1WBRear == NULL) {
+        L1CToL1WBFront = L1CToL1WBRear = temp;
     }
+    L1CToL1WBRear->next = temp;
+    L1CToL1WBRear = temp;
 }
 
-void dequeueCPUToL1C() {
+void dequeueL1CToL1WB() {
     struct Queue* temp = L1CToL1WBFront;
     if(L1CToL1WBFront == NULL) {
         return;
@@ -26,12 +25,12 @@ void dequeueCPUToL1C() {
         L1CToL1WBFront = L1CToL1WBRear = NULL;
     }
     else {
-        L1CToL1WBFront = L1CToL1WBRear->next;
+        L1CToL1WBFront = L1CToL1WBFront->next;
     }
     free(temp);
 }
 
-struct Queue* frontCPUToL1C() {
+struct Queue* frontL1CToL1WB() {
     return L1CToL1WBFront;
 }
 

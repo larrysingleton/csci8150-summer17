@@ -9,12 +9,11 @@ void enqueueL1CToVC(char* data, char* address, int64_t instruction) {
     temp->address = address;
     temp->instruction = instruction;
     temp->next = NULL;
-    if(L1CToVCFront == NULL) {
-        L1CToVCFront = temp;
-    } else {
-        L1CToVCFront->next = temp;
-        L1CToVCFront = temp;
+    if(L1CToVCFront == NULL && L1CToVCRear == NULL) {
+        L1CToVCFront = L1CToVCRear = temp;
     }
+    L1CToVCRear->next = temp;
+    L1CToVCRear = temp;
 }
 
 void dequeueL1CToVC() {
@@ -26,7 +25,7 @@ void dequeueL1CToVC() {
         L1CToVCFront = L1CToVCRear = NULL;
     }
     else {
-        L1CToVCFront = L1CToVCRear->next;
+        L1CToVCFront = L1CToVCFront->next;
     }
     free(temp);
 }

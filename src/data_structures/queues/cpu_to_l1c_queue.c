@@ -9,12 +9,11 @@ void enqueueCPUToL1C(char* data, char* address, int64_t instruction) {
     temp->address = address;
     temp->instruction = instruction;
     temp->next = NULL;
-    if(CPUToL1CFront == NULL) {
-        CPUToL1CFront = temp;
-    } else {
-        CPUToL1CRear->next = temp;
-        CPUToL1CRear = temp;
+    if(CPUToL1CFront == NULL && CPUToL1CRear == NULL) {
+        CPUToL1CFront = CPUToL1CRear = temp;
     }
+    CPUToL1CRear->next = temp;
+    CPUToL1CRear = temp;
 }
 
 void dequeueCPUToL1C() {
@@ -26,7 +25,7 @@ void dequeueCPUToL1C() {
         CPUToL1CFront = CPUToL1CRear = NULL;
     }
     else {
-        CPUToL1CFront = CPUToL1CRear->next;
+        CPUToL1CFront = CPUToL1CFront->next;
     }
     free(temp);
 }

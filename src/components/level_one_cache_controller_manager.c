@@ -15,6 +15,9 @@ void L1() {
 
     // Process new instructions coming from CPU
     processCPUToL1C();
+
+    victimCache();
+    levelOneWriteBuffer();
 }
 
 void processReturnValuesVCToL1C() {

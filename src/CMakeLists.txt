@@ -11,7 +11,7 @@ set(SOURCE_FILES
         components/preloader.c
         components/cpu_manager.c
         components/victim_cache_manager.c
-        components/write_buffer_manager.c
+        components/level_one_write_buffer_manager.c
         include/components.h
         include/data_structures.h
         include/main.h

@@ -152,3 +152,11 @@ void processCPUToL1C() {
         dequeueCPUToL1C();
     }
 }
+
+char* getMaskFromInstruction(int64_t instruction, char* data) {
+    //TODO: instruction & last 10bits
+    //TODO: value from steup one will be the location in the register of the mask
+    //TODO: parse the register value into an integer (atoi(string))
+    //TODO: extract the specified byte from data (it will be up to 64 bytes long)
+    //TODO: return the extracted value.
+}

@@ -146,6 +146,5 @@ void processCPUToL1C() {
         }
         // Remove the processed message.
         dequeueCPUToL1C();
-        free(frontItem);
     }
 }

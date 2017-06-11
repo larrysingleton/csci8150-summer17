@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 
 int inProgress() {
     if( frontCPUToL1C() != NULL ||
-        frontCPUToL1C() != NULL ||
+        frontL1CToCPU() != NULL ||
         frontL1DToL1C() != NULL ||
         frontL1CToL1D() != NULL ||
         frontL1CToVC() != NULL ||

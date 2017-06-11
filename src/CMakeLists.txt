@@ -9,7 +9,7 @@ set(SOURCE_FILES
         components/level_two_cache_controller_manager.c
         components/memory_manager.c
         components/preloader.c
-        components/processor.c
+        components/cpu_manager.c
         components/victim_cache_manager.c
         components/write_buffer_manager.c
         include/components.h

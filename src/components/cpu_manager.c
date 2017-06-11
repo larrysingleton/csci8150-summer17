@@ -29,9 +29,9 @@ void processInstruction(int64_t instruction) {
 }
 
 void processCPUIncoming() {
-    struct Queue* l1CToCPUFront = frontCPUToL1C();
+    struct Queue* l1CToCPUFront = frontL1CToCPU();
     if(l1CToCPUFront != NULL) { // If there is data on the queue to read.
-        printf("CPU:       \taddress: '%s'\tvalue: '%s'\n", l1CToCPUFront->address, l1CToCPUFront->row);
+        printf("CPU: address: '%s'\tvalue: '%s'\n", l1CToCPUFront->address, l1CToCPUFront->row);
         dequeueL1CToCPU();
     }
 }

@@ -48,7 +48,7 @@ struct Queue* frontCPUToL1C();
 
 void enqueueL1CToCPU(char* data, char* address, int64_t instruction);
 void dequeueL1CToCPU();
-struct Queue* frontCPUToL1C();
+struct Queue* frontL1CToCPU();
 
 void enqueueL1DToL1C(char* data, char* address, int64_t instruction);
 void dequeueL1DToL1C();

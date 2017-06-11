@@ -1,5 +1,6 @@
 #include "main.h"
 
+char* getDataByMask(int64_t instruction, char *data);
 void processReturnValuesL1DToL1C();
 void processCPUToL1C();
 void processReturnValuesL1WBToL1C();
@@ -27,8 +28,11 @@ void processReturnValuesVCToL1C() {
         // Print Status
         printf("L1C To CPU: Data(%s)\n", frontItem->address);
 
+
+        char *data = getDataByMask(frontItem->instruction, frontItem->data);
+
         // Forward data onto CPU.
-        enqueueL1CToCPU(frontItem->data,
+        enqueueL1CToCPU(data,
                         frontItem->address,
                         frontItem->instruction);
 
@@ -50,8 +54,11 @@ void processReturnValuesL1WBToL1C() {
     if(frontItem != NULL) {
         // Print Status
         printf("L1C To CPU: Data(%s)\n", frontItem->address);
+
+        char *data = getDataByMask(frontItem->instruction, frontItem->data);
+
         // Forward data onto CPU.
-        enqueueL1CToCPU(frontItem->data,
+        enqueueL1CToCPU(data,
                         frontItem->address,
                         frontItem->instruction);
 
@@ -73,8 +80,11 @@ void processReturnValuesL1DToL1C() {
     if(frontItem != NULL) {
         // Print Status
         printf("L1C To CPU: Data(%s)\n", frontItem->address);
+
+        char *data = getDataByMask(frontItem->instruction, frontItem->data);
+
         // Forward data onto CPU.
-        enqueueL1CToCPU(frontItem->data,
+        enqueueL1CToCPU(data,
                         frontItem->address,
                         frontItem->instruction);
 
@@ -89,8 +99,11 @@ void processReturnValuesL2CToL1C() {
     if(frontItem != NULL) {
         // Print Status
         printf("L1C To CPU: Data(%s)\n", frontItem->address);
+
+        char *data = getDataByMask(frontItem->instruction, frontItem->data);
+
         // Forward data onto CPU.
-        enqueueL1CToCPU(frontItem->data,
+        enqueueL1CToCPU(data,
                         frontItem->address,
                         frontItem->instruction);
 
@@ -169,4 +182,13 @@ void processCPUToL1C() {
         // Remove the processed message.
         dequeueCPUToL1C();
     }
+}
+
+char* getDataByMask(int64_t instruction, char *data) {
+    int dataRegisterLocation = (int)(instruction) & 0b0000000000001111111111;
+    char *dataMaskString = fetchRegister(dataRegisterLocation);
+    int dataMask = (int) strtol(dataMaskString, NULL, 2);
+
+    // TODO: might need to subtract one here
+    return data == NULL ? NULL : data + dataMask;
 }

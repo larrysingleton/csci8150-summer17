@@ -66,9 +66,9 @@ int parseTestFile(FILE *file) {
         int dataRegister = loadRegister(data);
         // load the instruction line into the cache
         int64_t instruction = op << 20 | (addressRegister << 10) | dataRegister;
-        if(DEBUG) printf("Instruction data %d\n", instruction);
+        if(DEBUG) printf("Instruction data %ld\n", instruction);
         loadInstructionCache(pc, instruction);
-        if(DEBUG) printf("Instruction loaded into register %d\n", fetchInstruction(pc));
+        if(DEBUG) printf("Instruction loaded into register %ld\n", fetchInstruction(pc));
         pc++;
     }
     return OK;

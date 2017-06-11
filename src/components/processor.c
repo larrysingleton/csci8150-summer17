@@ -3,9 +3,12 @@
 void processCPUIncoming();
 void processInstruction(int64_t instruction);
 
-void CPU(int64_t instruction) {
+void CPU(int pc) {
     processCPUIncoming();
-    processInstruction(instruction);
+    int64_t instruction = fetchInstruction(pc);
+    if(instruction != ERR) {
+        processInstruction(instruction);
+    }
 }
 
 void processInstruction(int64_t instruction) {

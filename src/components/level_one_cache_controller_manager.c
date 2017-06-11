@@ -19,13 +19,14 @@ void L1() {
 
 void processReturnValuesVCToL1C() {
     // See if there is anything in the queue.
-    if(frontVCToL1C() != NULL) {
+    struct Queue *frontItem = frontVCToL1C();
+    if(frontItem != NULL) {
         // Print Status
-        printf("L1C To CPU: Data(%s)\n", frontVCToL1C()->address);
+        printf("L1C To CPU: Data(%s)\n", frontItem->address);
         // Forward data onto CPU.
-        enqueueL1CToCPU(frontVCToL1C()->row,
-                        frontVCToL1C()->address,
-                        frontVCToL1C()->instruction);
+        enqueueL1CToCPU(frontItem->row,
+                        frontItem->address,
+                        frontItem->instruction);
 
         // TODO: Forward data to L1D
 
@@ -36,13 +37,14 @@ void processReturnValuesVCToL1C() {
 
 void processReturnValuesL1WBToL1C() {
     // See if there is anything in the queue.
-    if(frontL1WBToL1C() != NULL) {
+    struct Queue *freeItem = frontL1WBToL1C();
+    if(freeItem != NULL) {
         // Print Status
-        printf("L1C To CPU: Data(%s)\n", frontL1WBToL1C()->address);
+        printf("L1C To CPU: Data(%s)\n", freeItem->address);
         // Forward data onto CPU.
-        enqueueL1CToCPU(frontL1WBToL1C()->row,
-                        frontL1WBToL1C()->address,
-                        frontL1WBToL1C()->instruction);
+        enqueueL1CToCPU(freeItem->row,
+                        freeItem->address,
+                        freeItem->instruction);
 
         // TODO: Forward data to L1D
 
@@ -53,13 +55,14 @@ void processReturnValuesL1WBToL1C() {
 
 void processReturnValuesL1DToL1C() {
     // See if there is anything in the queue.
-    if(frontL1DToL1C() != NULL) {
+    struct Queue *frontItem = frontL1DToL1C();
+    if(frontItem != NULL) {
         // Print Status
-        printf("L1C To CPU: Data(%s)\n", frontL1DToL1C()->address);
+        printf("L1C To CPU: Data(%s)\n", frontItem->address);
         // Forward data onto CPU.
-        enqueueL1CToCPU(frontL1DToL1C()->row,
-                        frontL1DToL1C()->address,
-                        frontL1DToL1C()->instruction);
+        enqueueL1CToCPU(frontItem->row,
+                        frontItem->address,
+                        frontItem->instruction);
 
         // TODO: Forward data to L1D
 
@@ -70,13 +73,14 @@ void processReturnValuesL1DToL1C() {
 
 void processReturnValuesL2CToL1C() {
     // See if there is anything in the queue.
-    if(frontL2CToL1C() != NULL) {
+    struct Queue *frontItem = frontL2CToL1C();
+    if(frontItem != NULL) {
         // Print Status
-        printf("L1C To CPU: Data(%s)\n", frontL2CToL1C()->address);
+        printf("L1C To CPU: Data(%s)\n", frontItem->address);
         // Forward data onto CPU.
-        enqueueL1CToCPU(frontL2CToL1C()->row,
-                        frontL2CToL1C()->address,
-                        frontL2CToL1C()->instruction);
+        enqueueL1CToCPU(frontItem->row,
+                        frontItem->address,
+                        frontItem->instruction);
 
         // TODO: Forward data to L1D
 
@@ -87,7 +91,7 @@ void processReturnValuesL2CToL1C() {
 
 void processCPUToL1C() {
     // See if there is anything to process
-    struct Queue* frontItem = frontCPUToL1C();
+    struct Queue *frontItem = frontCPUToL1C();
     if(frontItem != NULL) {
         int address = atoi(frontItem->address);
         int inL1Cache = isInL1Cache(address);
@@ -104,7 +108,7 @@ void processCPUToL1C() {
                     frontItem->instruction);
         } else if(isInVC(address) == 1) {
             // Basically no matter what all we ever do is read from the victim cache.
-            if(frontCPUToL1C()->instruction >> 20 == READ) {
+            if(frontItem->instruction >> 20 == READ) {
                 printf("L1C to VC: Hit, Read(%s)\n", frontItem->address);
             } else {
                 printf("L1C to VC: Hit, Read(%s) for Write\n", frontItem->address);
@@ -142,5 +146,6 @@ void processCPUToL1C() {
         }
         // Remove the processed message.
         dequeueCPUToL1C();
+        free(frontItem);
     }
 }

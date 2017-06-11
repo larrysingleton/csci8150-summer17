@@ -1,7 +1,7 @@
 #ifndef CSCI8150_COMPONENTS_H
 #define CSCI8150_COMPONENTS_H
 
-void CPU(int64_t instruction);
+void CPU(int pc);
 void L1();
 void L2();
 void MEM();

@@ -18,10 +18,12 @@ set(SOURCE_FILES
         include/main.h
         data_structures/register_file.c
         data_structures/instruction_cache.c
-        data_structures/queue.c
+        data_structures/cpu_to_l1c_queue.c
         data_structures/level_one_cache.c
         data_structures/memory.c
-        data_structures/level_two_cache.c)
+        data_structures/level_two_cache.c
+        data_structures/victim_cache.c
+        data_structures/level_one_write_buffer.c)
 
 set(TEST_FILES
         unit-tests/instruction-cache-test.c

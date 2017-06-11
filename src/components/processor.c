@@ -1,12 +1,6 @@
 #include <main.h>
 
-union udouble {
-    double d;
-    unsigned long u;
-} ;
-
 void processCPUIncoming();
-
 void processInstruction(int64_t instruction);
 
 void CPU(int64_t instruction) {
@@ -25,17 +19,16 @@ void processInstruction(int64_t instruction) {
     }
 
     // Send request off to L1C
-    enqueue(fetchRegister(addressRegisterLocation),
+    enqueueCPUToL1C(fetchRegister(addressRegisterLocation),
             fetchRegister(dataRegisterLocation),
-            instruction,
-            CPUToL1CFront,
-            CPUToL1CRear
+            instruction
     );
 }
 
 void processCPUIncoming() {
-    if(L1CToCPUFront != NULL) { // If there is data on the queue to read.
-        printf("CPU:       \taddress: '%s'\tvalue: '%s'\n", L1CToCPUFront->address, L1CToCPUFront->row);
-        dequeue(L1CToCPUFront, L1CToCPURear);
+    struct Queue* l1CToCPUFront = frontCPUToL1C();
+    if(l1CToCPUFront != NULL) { // If there is data on the queue to read.
+        printf("CPU:       \taddress: '%s'\tvalue: '%s'\n", l1CToCPUFront->address, l1CToCPUFront->row);
+        //dequeue(L1CToCPUFront, L1CToCPURear);
     }
 }

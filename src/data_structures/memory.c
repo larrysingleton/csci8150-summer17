@@ -4,14 +4,14 @@
 // so each block aka row will be 64 bytes
 // which means 2048 rows
 
-#define row(address) (address >> 6)
+#define row(address) (address & 0b0000011111111111)
 
 char* memory[2048];
 
-void loadMemoryBlock(long address, char* data) {
+void loadMemoryBlock(int address, char* data) {
     memory[row(address)] = data;
 }
 
-char* fetchMemoryBlock(long address) {
+char* fetchMemoryBlock(int address) {
     return memory[row(address)];
 }

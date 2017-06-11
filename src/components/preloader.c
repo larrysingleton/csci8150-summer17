@@ -74,6 +74,7 @@ int parseTestFile(FILE *file) {
 int preLoadInstructionCache(const char *testFile) {
     FILE *file;
 
+    if(DEBUG) printf("\n==================================================");
     if(DEBUG) printf("\nLoading instruction cache from: [%s]", testFile);
     if (file = fopen(testFile, "r")) {
         parseTestFile(file);
@@ -82,6 +83,8 @@ int preLoadInstructionCache(const char *testFile) {
         if(DEBUG) printf("\nUnable to read test file: %s", testFile);
         return ERR;
     }
+
+    if(DEBUG) printf("\n==================================================\n\n");
 
     return OK;
 }

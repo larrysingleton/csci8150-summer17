@@ -10,7 +10,8 @@ void victimCache() {
             // Forward data onto CPU.
             enqueueVCToL1C(fetchFromVC(atoi(frontItem->address)),
                            frontItem->address,
-                           frontItem->instruction);
+                           frontItem->instruction,
+                            WRITE);
 
         } else { // Write Request
             loadVC((int) strtoll(frontItem->address, NULL, 2),

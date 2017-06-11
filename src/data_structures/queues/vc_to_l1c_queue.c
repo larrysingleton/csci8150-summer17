@@ -3,12 +3,13 @@
 struct Queue* VCToL1CFront;
 struct Queue* VCToL1CRear;
 
-void enqueueVCToL1C(char* data, char* address, int64_t instruction) {
+void enqueueVCToL1C(char* data, char* address, int64_t instruction, int opCode) {
     struct Queue* temp = (struct Queue*) malloc(sizeof(struct Queue));
     temp->data = data;
     temp->address = address;
     temp->instruction = instruction;
     temp->next = NULL;
+    temp->opCode = opCode;
     if(VCToL1CFront == NULL && VCToL1CRear == NULL) {
         VCToL1CFront = VCToL1CRear = temp;
     }

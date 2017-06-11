@@ -17,6 +17,7 @@ void L1() {
     // Process new instructions coming from CPU
     processCPUToL1C();
 
+    levelOneDataCacheManager();
     victimCache();
     levelOneWriteBuffer();
 }
@@ -34,12 +35,14 @@ void processReturnValuesVCToL1C() {
         // Forward data onto CPU.
         enqueueL1CToCPU(data,
                         frontItem->address,
-                        frontItem->instruction);
+                        frontItem->instruction,
+                        WRITE);
 
         printf("L1C To L1D: Data(%s)\n", frontItem->address);
         enqueueL1CToL1D(frontItem->data,
                         frontItem->address,
-                        frontItem->instruction);
+                        frontItem->instruction,
+                        WRITE);
 
         evictFromVC((int) strtoll(frontItem->address, NULL, 2));
 
@@ -60,12 +63,14 @@ void processReturnValuesL1WBToL1C() {
         // Forward data onto CPU.
         enqueueL1CToCPU(data,
                         frontItem->address,
-                        frontItem->instruction);
+                        frontItem->instruction,
+                        WRITE);
 
         printf("L1C To L1D: Data(%s)\n", frontItem->address);
         enqueueL1CToL1D(frontItem->data,
                         frontItem->address,
-                        frontItem->instruction);
+                        frontItem->instruction,
+                        WRITE);
 
         evictFromL1WB((int) strtoll(frontItem->address, NULL, 2));
 
@@ -86,7 +91,8 @@ void processReturnValuesL1DToL1C() {
         // Forward data onto CPU.
         enqueueL1CToCPU(data,
                         frontItem->address,
-                        frontItem->instruction);
+                        frontItem->instruction,
+                        WRITE);
 
         //remove the message from the queue
         dequeueL1DToL1C();
@@ -105,12 +111,14 @@ void processReturnValuesL2CToL1C() {
         // Forward data onto CPU.
         enqueueL1CToCPU(data,
                         frontItem->address,
-                        frontItem->instruction);
+                        frontItem->instruction,
+                        WRITE);
 
         printf("L1C To L1D: Data(%s)\n", frontItem->address);
         enqueueL1CToL1D(frontItem->data,
                         frontItem->address,
-                        frontItem->instruction);
+                        frontItem->instruction,
+                        WRITE);
 
         //remove the message from the queue
         dequeueL2CToL1C();
@@ -129,12 +137,14 @@ void processCPUToL1C() {
                 printf("L1C to L1D: Hit, Read(%s)\n", frontItem->address);
                 enqueueL1CToL1D(NULL,
                                 frontItem->address,
-                                frontItem->instruction);
+                                frontItem->instruction,
+                                READ);
             } else {
                 printf("L1C to L1D: Hit, Write (%s)\n", frontItem->address);
                 enqueueL1CToL1D(frontItem->data,
                                 frontItem->address,
-                                frontItem->instruction);
+                                frontItem->instruction,
+                                WRITE);
             }
 
 
@@ -148,18 +158,21 @@ void processCPUToL1C() {
 
             enqueueL1CToVC(NULL,
                         frontItem->address,
-                        frontItem->instruction);
+                        frontItem->instruction,
+                        READ);
         } else if(isInL1WB(address) == 1) {
             if(frontItem->instruction >> 20 == READ) {
                 printf("L1C to WB: Hit, Read(%s)\n", frontItem->address);
                 enqueueL1CToL1WB(NULL,
                                  frontItem->address,
-                                 frontItem->instruction);
+                                 frontItem->instruction,
+                                 READ);
             } else {
                 printf("L1C to WB: Hit, Write(%s)\n", frontItem->address);
                 enqueueL1CToL1WB(frontItem->data,
                                  frontItem->address,
-                                 frontItem->instruction);
+                                 frontItem->instruction,
+                                 WRITE);
             }
         } else { // Cache miss
             if (inL1Cache == MISS_D) {
@@ -168,16 +181,15 @@ void processCPUToL1C() {
             }
             if(frontItem->instruction >> 20 == READ) {
                 printf("L1C to L2C: Miss, Read(%s)\n", frontItem->address);
-                enqueueL1CToL2C(NULL,
-                                frontItem->address,
-                                frontItem->instruction);
             } else {
                 printf("L1C to L2C: Miss, Write(%s)\n", frontItem->address);
-                enqueueL1CToL2C(frontItem->data,
-                                frontItem->address,
-                                frontItem->instruction);
             }
-            setL1RowWaiting(address);
+
+            setL1RowStatus(address, RD_WAIT_L2D);
+            enqueueL1CToL2C(NULL,
+                            frontItem->address,
+                            frontItem->instruction,
+                            READ);
         }
         // Remove the processed message.
         dequeueCPUToL1C();
@@ -188,7 +200,8 @@ char* getDataByMask(int64_t instruction, char *data) {
     int dataRegisterLocation = (int)(instruction) & 0b0000000000001111111111;
     char *dataMaskString = fetchRegister(dataRegisterLocation);
     int dataMask = (int) strtol(dataMaskString, NULL, 2);
-
-    // TODO: might need to subtract one here
-    return data == NULL ? NULL : data + dataMask;
+    char *newData = NULL;
+    if(data != NULL)
+        newData = &data[dataMask];
+    return newData;
 }

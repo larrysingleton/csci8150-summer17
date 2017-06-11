@@ -6,9 +6,10 @@ void L1();
 void L2();
 void MEM();
 void victimCache();
+void levelOneDataCacheManager();
 void levelOneWriteBuffer();
 void levelTwoWriteBuffer();
-
+void levelTwoDataCacheManager();
 
 int preLoadInstructionCache(const char *testFile);
 int parseTestFile(FILE *file);

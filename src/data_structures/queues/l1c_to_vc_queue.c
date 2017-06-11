@@ -3,12 +3,13 @@
 struct Queue* L1CToVCFront;
 struct Queue* L1CToVCRear;
 
-void enqueueL1CToVC(char* data, char* address, int64_t instruction) {
+void enqueueL1CToVC(char* data, char* address, int64_t instruction, int opCode) {
     struct Queue* temp = (struct Queue*) malloc(sizeof(struct Queue));
     temp->data = data;
     temp->address = address;
     temp->instruction = instruction;
     temp->next = NULL;
+    temp->opCode = opCode;
     if(L1CToVCFront == NULL && L1CToVCRear == NULL) {
         L1CToVCFront = L1CToVCRear = temp;
     }

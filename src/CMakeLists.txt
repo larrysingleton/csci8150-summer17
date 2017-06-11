@@ -13,6 +13,8 @@ set(SOURCE_FILES
         components/victim_cache_manager.c
         components/level_one_write_buffer_manager.c
         components/level_two_write_buffer_manager.c
+        components/level_two_data_cache_manager.c
+        components/level_one_data_cache_manager.c
         include/components.h
         include/data_structures.h
         include/main.h
@@ -39,6 +41,6 @@ set(SOURCE_FILES
         data_structures/queues/l2c_to_mem_queue.c
         data_structures/queues/l2d_to_l2c_queue.c
         data_structures/queues/l2wb_to_l2c_queueu.c
-        data_structures/queues/mem_to_l2c_queue.c components/level_two_data_cache_manager.c)
+        data_structures/queues/mem_to_l2c_queue.c)
 
 add_executable(CSCI8150 ${SOURCE_FILES} main.c)

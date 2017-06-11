@@ -3,12 +3,13 @@
 struct Queue* L2DToL2CFront;
 struct Queue* L2DToL2CRear;
 
-void enqueueL2DToL2C(char* data, char* address, int64_t instruction) {
+void enqueueL2DToL2C(char* data, char* address, int64_t instruction, int opCode) {
     struct Queue* temp = (struct Queue*) malloc(sizeof(struct Queue));
     temp->data = data;
     temp->address = address;
     temp->instruction = instruction;
     temp->next = NULL;
+    temp->opCode = opCode;
     if(L2DToL2CFront == NULL && L2DToL2CRear == NULL) {
         L2DToL2CFront = L2DToL2CRear = temp;
     }

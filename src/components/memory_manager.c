@@ -20,7 +20,8 @@ void processL2CToMEM() {
 
         enqueueMemToL2C(fetchMemoryBlock(address),
                         frontItem->address,
-                        frontItem->instruction);
+                        frontItem->instruction,
+                        WRITE);
 
         // Remove the processed message.
         dequeueL2CToMem();

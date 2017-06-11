@@ -3,12 +3,13 @@
 struct Queue* MemToL2CFront;
 struct Queue* MemToL2CCRear;
 
-void enqueueMemToL2C(char* data, char* address, int64_t instruction) {
+void enqueueMemToL2C(char* data, char* address, int64_t instruction, int opCode) {
     struct Queue* temp = (struct Queue*) malloc(sizeof(struct Queue));
     temp->data = data;
     temp->address = address;
     temp->instruction = instruction;
     temp->next = NULL;
+    temp->opCode = opCode;
     if(MemToL2CFront == NULL && MemToL2CCRear == NULL) {
         MemToL2CFront = MemToL2CCRear = temp;
     }

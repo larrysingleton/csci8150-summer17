@@ -9,7 +9,8 @@ void levelTwoWriteBuffer() {
             // Forward data onto CPU.
             enqueueVCToL1C(fetchFromL2WB((int) strtoll(frontItem->address, NULL, 2)),
                            frontItem->address,
-                           frontItem->instruction);
+                           frontItem->instruction,
+                            WRITE);
 
         } else { // Write Request
             loadL2WB((int) strtoll(frontItem->address, NULL, 2),

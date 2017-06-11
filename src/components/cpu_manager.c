@@ -24,7 +24,8 @@ void processInstruction(int64_t instruction) {
     // Send request off to L1C
     enqueueCPUToL1C(fetchRegister(dataRegisterLocation),
             fetchRegister(addressRegisterLocation),
-            instruction
+            instruction,
+            operation
     );
 }
 

@@ -14,33 +14,33 @@ char* l1DataCache[4][64];
 
 int isInL1Cache(int address) {
     // There are 2048 possible memory addresses, we need to fit them into 256
-    int cacheControllerBlock = address % 256; // This will mean there are 8 possible address
+    int cacheControllerBlock = address % 64; // This will mean there are 8 possible address
 
     // Check if the record is in the cache.
     if ((l1CacheController[cacheControllerBlock] >> 15 == 1 &&
             l1CacheControlleraddress(l1CacheController[cacheControllerBlock]) == address) ||
-        (l1CacheController[cacheControllerBlock + 1] >> 15 == 1 &&
+        (l1CacheController[cacheControllerBlock * 2] >> 15 == 1 &&
             l1CacheControlleraddress(l1CacheController[cacheControllerBlock]) == address) ||
-        (l1CacheController[cacheControllerBlock + 2] >> 15 == 1 &&
+        (l1CacheController[cacheControllerBlock * 3] >> 15 == 1 &&
             l1CacheControlleraddress(l1CacheController[cacheControllerBlock]) == address) ||
-        (l1CacheController[cacheControllerBlock + 3] >> 15 == 1 &&
+        (l1CacheController[cacheControllerBlock * 4] >> 15 == 1 &&
             l1CacheControlleraddress(l1CacheController[cacheControllerBlock]) == address)) {
         return HIT;
     }
 
     // Check if any of them are just empty.
     else if(l1CacheController[cacheControllerBlock] >> 15 == 0 ||
-            l1CacheController[cacheControllerBlock + 1] >> 15 == 0 ||
-            l1CacheController[cacheControllerBlock + 2] >> 15 == 0 ||
-            l1CacheController[cacheControllerBlock + 3] >> 15 == 0) {
+            l1CacheController[cacheControllerBlock * 2] >> 15 == 0 ||
+            l1CacheController[cacheControllerBlock * 3] >> 15 == 0 ||
+            l1CacheController[cacheControllerBlock * 4] >> 15 == 0) {
         return MISS_I;
     }
 
     // Check if any of them are populated, but don't need to be written.
     else if(l1CacheController[cacheControllerBlock] >> 15 == 0 ||
-            l1CacheController[cacheControllerBlock + 1] >> 15 == 0 ||
-            l1CacheController[cacheControllerBlock + 2] >> 15 == 0 ||
-        l1CacheController[cacheControllerBlock + 3] >> 15 == 0) {
+            l1CacheController[cacheControllerBlock * 2] >> 15 == 0 ||
+            l1CacheController[cacheControllerBlock *3] >> 15 == 0 ||
+        l1CacheController[cacheControllerBlock * 4] >> 15 == 0) {
         return MISS_C;
     }
 
@@ -54,6 +54,55 @@ void victimizeL1(int address) {
 
 }
 
-void setL1RowWaiting(int address) {
 
+char* fetchFromL1Cache(int address) {
+    // There are 2048 possible memory addresses, we need to fit them into 256
+    int cacheControllerBlock = address % 64; // This will mean there are 8 possible address
+
+    if(l1CacheControlleraddress(l1CacheController[cacheControllerBlock]) == address) {
+        return l1DataCache[0][cacheControllerBlock];
+    } else if (l1CacheControlleraddress(l1CacheController[cacheControllerBlock * 2]) == address) {
+        return l1DataCache[1][cacheControllerBlock];
+    } else if (l1CacheControlleraddress(l1CacheController[cacheControllerBlock * 3]) == address) {
+        return l1DataCache[2][cacheControllerBlock];
+    } else {
+        return l1DataCache[3][cacheControllerBlock];
+    }
+}
+
+void loadL1Cache(int address, char* data) {
+    // There are 2048 possible memory addresses, we need to fit them into 256
+    int cacheControllerBlock = address % 409; // This will mean there are 8 possible address
+
+    if(l1CacheControlleraddress(l1CacheController[cacheControllerBlock]) == address) {
+        l1DataCache[0][cacheControllerBlock] = data;
+        l1CacheControllerExtendedStatus[cacheControllerBlock] = READY;
+    } else if (l1CacheControlleraddress(l1CacheController[cacheControllerBlock * 2]) == address){
+        l1DataCache[1][cacheControllerBlock] = data;
+        l1CacheControllerExtendedStatus[cacheControllerBlock * 2] = READY;
+    } else if (l1CacheControlleraddress(l1CacheController[cacheControllerBlock * 3]) == address){
+        l1DataCache[2][cacheControllerBlock] = data;
+        l1CacheControllerExtendedStatus[cacheControllerBlock * 3] = READY;
+    } else {
+        l1DataCache[3][cacheControllerBlock] = data;
+        l1CacheControllerExtendedStatus[cacheControllerBlock * 4] = READY;
+    }
+}
+
+void setL1RowStatus(int address, int cacheState) {
+    int cacheControllerBlock = address % 64;
+
+    if(l1CacheController[cacheControllerBlock] >> 15 != 1) {
+        l1CacheController[cacheControllerBlock] = (0b100 << 13) & (address << 2);
+        l1CacheControllerExtendedStatus[cacheControllerBlock] = cacheState;
+    } else if (l1CacheController[cacheControllerBlock * 2] >> 15 != 1){
+        l1CacheController[cacheControllerBlock * 2] = (0b100 << 13) & (address << 2);
+        l1CacheControllerExtendedStatus[cacheControllerBlock * 2] = cacheState;
+    } else if (l1CacheController[cacheControllerBlock * 3] >> 15 != 1){
+        l1CacheController[cacheControllerBlock * 3] = (0b100 << 13) & (address << 2);
+        l1CacheControllerExtendedStatus[cacheControllerBlock * 3] = cacheState;
+    } else {
+        l1CacheController[cacheControllerBlock * 4] = (0b100 << 13) & (address << 2);
+        l1CacheControllerExtendedStatus[cacheControllerBlock * 4] = cacheState;
+    }
 }

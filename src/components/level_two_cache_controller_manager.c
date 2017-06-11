@@ -11,8 +11,8 @@ void L2() {
     processL2WBToL2C();
 
     processL1ToL2();
+    levelTwoDataCacheManager();
     levelTwoWriteBuffer();
-
 }
 
 void processL2WBToL2C() {
@@ -24,15 +24,16 @@ void processL2WBToL2C() {
         // Forward data onto CPU.
         enqueueL2CToL1C(frontItem->data,
                         frontItem->address,
-                        frontItem->instruction);
+                        frontItem->instruction,
+                        WRITE);
 
         printf("L2C To L2D: Data(%s)\n", frontItem->address);
         enqueueL2CToL2D(frontItem->data,
                         frontItem->address,
-                        frontItem->instruction);
+                        frontItem->instruction,
+                        WRITE);
 
         evictFromL2WB((int) strtoll(frontItem->address, NULL, 2));
-
 
         //remove the message from the queue
         dequeueL2WBToL2C();
@@ -48,7 +49,8 @@ void processL2DToL2C() {
         // Forward data onto CPU.
         enqueueL2CToL1C(frontItem->data,
                         frontItem->address,
-                        frontItem->instruction);
+                        frontItem->instruction,
+                        WRITE);
 
         //remove the message from the queue
         dequeueL2DToL2C();
@@ -64,13 +66,15 @@ void processMemToL2C() {
         // Forward data onto CPU.
         enqueueL2CToL1C(frontItem->data,
                         frontItem->address,
-                        frontItem->instruction);
+                        frontItem->instruction,
+                        WRITE);
 
         printf("L2C To L2D: Data(%s)\n", frontItem->address);
 
         enqueueL2CToL2D(frontItem->data,
                         frontItem->address,
-                        frontItem->instruction);
+                        frontItem->instruction,
+                        WRITE);
 
         //remove the message from the queue
         dequeueMemToL2C();
@@ -89,24 +93,30 @@ void processL1ToL2() {
                 printf("L2C to L2D: Hit, Read(%s)\n", frontItem->address);
                 enqueueL2CToL2D(NULL,
                                 frontItem->address,
-                                frontItem->instruction);
+                                frontItem->instruction,
+                                READ);
+                // TODO: Set status of cache line to waiting for L2D
             } else {
                 printf("L2C to L2D: Hit, Write (%s)\n", frontItem->address);
                 enqueueL2CToL2D(frontItem->data,
                                 frontItem->address,
-                                frontItem->instruction);
+                                frontItem->instruction,
+                                WRITE);
             }
         } else if(isInL2WB(address)) {
             if(frontItem->instruction >> 20 == READ) {
                 printf("L2C to WB: Hit, Read(%s)\n", frontItem->address);
                 enqueueL1CToL1WB(NULL,
                                  frontItem->address,
-                                 frontItem->instruction);
+                                 frontItem->instruction,
+                                READ);
+                // TODO: Set status of cache line to waiting for WB
             } else {
                 printf("L2C to WB: Hit, Write(%s)\n", frontItem->address);
                 enqueueL1CToL1WB(frontItem->data,
                                  frontItem->address,
-                                 frontItem->instruction);
+                                 frontItem->instruction,
+                                WRITE);
             }
         } else { // Cache miss
             if (inL2Cache == MISS_D) {
@@ -121,9 +131,10 @@ void processL1ToL2() {
 
             enqueueL2CToMem(NULL,
                             frontItem->address,
-                            frontItem->instruction);
+                            frontItem->instruction,
+                            READ);
 
-            setL2RowWaiting(address);
+            // TODO: Set Status of cache line to waiting for memory.
         }
         // Remove the processed message.
         dequeueL1CToL2C();

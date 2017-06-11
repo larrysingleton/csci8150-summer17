@@ -5,7 +5,7 @@ struct Queue* L2CToL2WBRear;
 
 void enqueueL2CToL2WB(char* data, char* address, int64_t instruction) {
     struct Queue* temp = (struct Queue*) malloc(sizeof(struct Queue));
-    temp->row = data;
+    temp->data = data;
     temp->address = address;
     temp->instruction = instruction;
     temp->next = NULL;

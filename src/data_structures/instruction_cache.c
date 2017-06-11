@@ -1,14 +1,14 @@
 #include "main.h"
 
-// Instruction Cache, 64 rows to line up for each row in the instructionDataCache
+// Instruction Cache, 64 rows to line up for each data in the instructionDataCache
 int instructionCacheController[64];
-// Each row in the controller is 16 bits,
+// Each data in the controller is 16 bits,
 // Bit 1: valid
 // Bit 2: dirty
 // Bit 3: least recently used
-// Bit 4-9: address of row
-// Bit 10-13: address of instruction in row.
-// So 64 rows of 64 bytes (each row of 64 bytes is broken into 8 sections of 8 bytes each
+// Bit 4-9: address of data
+// Bit 10-13: address of instruction in data.
+// So 64 rows of 64 bytes (each data of 64 bytes is broken into 8 sections of 8 bytes each
 int64_t instructionCacheData[64][8];
 
 int64_t fetchInstruction(int programCounter) {

@@ -4,7 +4,7 @@
 void victimCache() {
     struct Queue* frontItem = frontL1CToVC();
     if(frontItem != NULL) {
-        if(frontItem->row == NULL) { // Read request
+        if(frontItem->data == NULL) { // Read request
             // Print Status
             printf("VC To L1C: Data(%s)\n", frontItem->address);
             // Forward data onto CPU.
@@ -14,7 +14,7 @@ void victimCache() {
 
         } else { // Write Request
             loadVC((int) strtoll(frontItem->address, NULL, 2),
-                   frontItem->row
+                   frontItem->data
             );
         }
 

@@ -3,7 +3,7 @@
 void levelTwoWriteBuffer() {
     struct Queue* frontItem = frontL2CToL2WB();
     if(frontItem != NULL) {
-        if(frontItem->row == NULL) { // Read request
+        if(frontItem->data == NULL) { // Read request
             // Print Status
             printf("L2WB To L2C: Data(%s)\n", frontItem->address);
             // Forward data onto CPU.
@@ -13,7 +13,7 @@ void levelTwoWriteBuffer() {
 
         } else { // Write Request
             loadL2WB((int) strtoll(frontItem->address, NULL, 2),
-                     frontItem->row
+                     frontItem->data
             );
         }
 

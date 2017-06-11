@@ -22,12 +22,12 @@ void processL2WBToL2C() {
         // Print Status
         printf("L2C To L1C: Data(%s)\n", frontItem->address);
         // Forward data onto CPU.
-        enqueueL2CToL1C(frontItem->row,
+        enqueueL2CToL1C(frontItem->data,
                         frontItem->address,
                         frontItem->instruction);
 
         printf("L2C To L2D: Data(%s)\n", frontItem->address);
-        enqueueL2CToL2D(frontItem->row,
+        enqueueL2CToL2D(frontItem->data,
                         frontItem->address,
                         frontItem->instruction);
 
@@ -46,7 +46,7 @@ void processL2DToL2C() {
         // Print Status
         printf("L2C To L1C: Data(%s)\n", frontItem->address);
         // Forward data onto CPU.
-        enqueueL2CToL1C(frontItem->row,
+        enqueueL2CToL1C(frontItem->data,
                         frontItem->address,
                         frontItem->instruction);
 
@@ -62,13 +62,13 @@ void processMemToL2C() {
         // Print Status
         printf("L2C To L1C: Data(%s)\n", frontItem->address);
         // Forward data onto CPU.
-        enqueueL2CToL1C(frontItem->row,
+        enqueueL2CToL1C(frontItem->data,
                         frontItem->address,
                         frontItem->instruction);
 
         printf("L2C To L2D: Data(%s)\n", frontItem->address);
 
-        enqueueL2CToL2D(frontItem->row,
+        enqueueL2CToL2D(frontItem->data,
                         frontItem->address,
                         frontItem->instruction);
 
@@ -92,7 +92,7 @@ void processL1ToL2() {
                                 frontItem->instruction);
             } else {
                 printf("L2C to L2D: Hit, Write (%s)\n", frontItem->address);
-                enqueueL2CToL2D(frontItem->row,
+                enqueueL2CToL2D(frontItem->data,
                                 frontItem->address,
                                 frontItem->instruction);
             }
@@ -104,7 +104,7 @@ void processL1ToL2() {
                                  frontItem->instruction);
             } else {
                 printf("L2C to WB: Hit, Write(%s)\n", frontItem->address);
-                enqueueL1CToL1WB(frontItem->row,
+                enqueueL1CToL1WB(frontItem->data,
                                  frontItem->address,
                                  frontItem->instruction);
             }

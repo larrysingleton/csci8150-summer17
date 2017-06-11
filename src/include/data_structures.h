@@ -44,7 +44,7 @@ void evictFromL2WB(int address);
 //Queues
 typedef struct Queue {
     struct Queue *next; //next on the queue
-    char* row; //The data in the queue
+    char* data; //The data in the queue
     char* address; // The address of the data that was fetched
     int64_t instruction;
 } queue;

@@ -26,13 +26,14 @@ void processReturnValuesVCToL1C() {
     if(frontItem != NULL) {
         // Print Status
         printf("L1C To CPU: Data(%s)\n", frontItem->address);
+
         // Forward data onto CPU.
-        enqueueL1CToCPU(frontItem->row,
+        enqueueL1CToCPU(frontItem->data,
                         frontItem->address,
                         frontItem->instruction);
 
         printf("L1C To L1D: Data(%s)\n", frontItem->address);
-        enqueueL1CToL1D(frontItem->row,
+        enqueueL1CToL1D(frontItem->data,
                         frontItem->address,
                         frontItem->instruction);
 
@@ -50,12 +51,12 @@ void processReturnValuesL1WBToL1C() {
         // Print Status
         printf("L1C To CPU: Data(%s)\n", frontItem->address);
         // Forward data onto CPU.
-        enqueueL1CToCPU(frontItem->row,
+        enqueueL1CToCPU(frontItem->data,
                         frontItem->address,
                         frontItem->instruction);
 
         printf("L1C To L1D: Data(%s)\n", frontItem->address);
-        enqueueL1CToL1D(frontItem->row,
+        enqueueL1CToL1D(frontItem->data,
                         frontItem->address,
                         frontItem->instruction);
 
@@ -73,7 +74,7 @@ void processReturnValuesL1DToL1C() {
         // Print Status
         printf("L1C To CPU: Data(%s)\n", frontItem->address);
         // Forward data onto CPU.
-        enqueueL1CToCPU(frontItem->row,
+        enqueueL1CToCPU(frontItem->data,
                         frontItem->address,
                         frontItem->instruction);
 
@@ -89,12 +90,12 @@ void processReturnValuesL2CToL1C() {
         // Print Status
         printf("L1C To CPU: Data(%s)\n", frontItem->address);
         // Forward data onto CPU.
-        enqueueL1CToCPU(frontItem->row,
+        enqueueL1CToCPU(frontItem->data,
                         frontItem->address,
                         frontItem->instruction);
 
         printf("L1C To L1D: Data(%s)\n", frontItem->address);
-        enqueueL1CToL1D(frontItem->row,
+        enqueueL1CToL1D(frontItem->data,
                         frontItem->address,
                         frontItem->instruction);
 
@@ -118,7 +119,7 @@ void processCPUToL1C() {
                                 frontItem->instruction);
             } else {
                 printf("L1C to L1D: Hit, Write (%s)\n", frontItem->address);
-                enqueueL1CToL1D(frontItem->row,
+                enqueueL1CToL1D(frontItem->data,
                                 frontItem->address,
                                 frontItem->instruction);
             }
@@ -143,7 +144,7 @@ void processCPUToL1C() {
                                  frontItem->instruction);
             } else {
                 printf("L1C to WB: Hit, Write(%s)\n", frontItem->address);
-                enqueueL1CToL1WB(frontItem->row,
+                enqueueL1CToL1WB(frontItem->data,
                                  frontItem->address,
                                  frontItem->instruction);
             }
@@ -159,7 +160,7 @@ void processCPUToL1C() {
                                 frontItem->instruction);
             } else {
                 printf("L1C to L2C: Miss, Write(%s)\n", frontItem->address);
-                enqueueL1CToL2C(frontItem->row,
+                enqueueL1CToL2C(frontItem->data,
                                 frontItem->address,
                                 frontItem->instruction);
             }

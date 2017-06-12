@@ -26,7 +26,7 @@ void processMemTemp() {
             }
             dequeueMemTemp();
         } else { // Still transferring data.
-            frontItem->delay--;
+            frontItem->delay = frontItem->delay - 1;
         }
     }
 }

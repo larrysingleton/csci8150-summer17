@@ -1,7 +1,7 @@
 #include <main.h>
 
-struct Queue* tempFront;
-struct Queue* tempRear;
+struct Queue* memTempFront;
+struct Queue* memTempRear;
 
 void enqueueMemTemp(char* data, char* address, int64_t instruction, int opCode, int delay) {
     struct Queue* temp = (struct Queue*) malloc(sizeof(struct Queue));
@@ -11,27 +11,27 @@ void enqueueMemTemp(char* data, char* address, int64_t instruction, int opCode, 
     temp->next = NULL;
     temp->opCode = opCode;
     temp->delay = delay;
-    if(tempFront == NULL && tempRear == NULL) {
-        tempFront = tempRear = temp;
+    if(memTempFront == NULL && memTempRear == NULL) {
+        memTempFront = memTempRear = temp;
     }
-    tempRear->next = temp;
-    tempRear = temp;
+    memTempRear->next = temp;
+    memTempRear = temp;
 }
 
 void dequeueMemTemp() {
-    struct Queue* temp = tempFront;
-    if(tempFront == NULL) {
+    struct Queue* temp = memTempFront;
+    if(memTempFront == NULL) {
         return;
     }
-    if(tempFront == tempRear) {
-        tempFront = tempRear = NULL;
+    if(memTempFront == memTempRear) {
+        memTempFront = memTempRear = NULL;
     }
     else {
-        tempFront = tempFront->next;
+        memTempFront = memTempFront->next;
     }
     free(temp);
 }
 
 struct Queue* frontMemTemp() {
-    return tempFront;
+    return memTempFront;
 }

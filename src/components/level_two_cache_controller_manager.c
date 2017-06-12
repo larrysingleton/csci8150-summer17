@@ -95,7 +95,7 @@ void processL1ToL2() {
                                 frontItem->address,
                                 frontItem->instruction,
                                 READ);
-                // TODO: Set status of cache line to waiting for L2D
+                setL2RowStatus(address, RD_WAIT_L2D);
             } else {
                 printf("L2C to L2D: Hit, Write (%s)\n", frontItem->address);
                 enqueueL2CToL2D(frontItem->data,
@@ -110,7 +110,7 @@ void processL1ToL2() {
                                  frontItem->address,
                                  frontItem->instruction,
                                 READ);
-                // TODO: Set status of cache line to waiting for WB
+                setL2RowStatus(address, RD_WAIT_WB);
             } else {
                 printf("L2C to WB: Hit, Write(%s)\n", frontItem->address);
                 enqueueL1CToL1WB(frontItem->data,
@@ -121,20 +121,20 @@ void processL1ToL2() {
         } else { // Cache miss
             if (inL2Cache == MISS_D) {
                 printf("L2C to L2D: Miss, Victimize(%s)\n", frontItem->address);
-                victimizeL1(address);
+                //victimizeL2(address); // In this case it means send to wb
             }
             if(frontItem->instruction >> 20 == READ) {
                 printf("L2C to MEM: Miss, Read(%s)\n", frontItem->address);
+                setL2RowStatus(address, RD_WAIT_MEM);
             } else {
                 printf("L2C to MEM: Miss, Write(%s)\n", frontItem->address);
+                setL2RowStatus(address, WR_WAIT_MEM);
             }
 
             enqueueL2CToMem(NULL,
                             frontItem->address,
                             frontItem->instruction,
                             READ);
-
-            // TODO: Set Status of cache line to waiting for memory.
         }
         // Remove the processed message.
         dequeueL1CToL2C();

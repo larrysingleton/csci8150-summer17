@@ -3,7 +3,7 @@
 void levelTwoDataCacheManager() {
     struct Queue* frontItem = frontL2CToL2D();
     if(frontItem != NULL) {
-        if(frontItem->data == NULL) { // Read request
+        if(frontItem->opCode == READ) { // Read request
             // Print Status
             printf("L2D To L2C: Data(%s)\n", frontItem->address);
             // Forward data onto CPU.

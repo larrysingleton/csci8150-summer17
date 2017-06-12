@@ -1,2 +1,7 @@
-# Mutual inclusion violation and fix
-READ 700
+WRITE 00000000000 a
+WRITE 00001000000 b
+WRITE 00010000000 c
+WRITE 00100000000 d
+#This one should cause the WB write
+WRITE 01000000000 e
+#not sure how to trigger this.

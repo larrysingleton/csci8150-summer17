@@ -1,2 +1,8 @@
-# Read from L1 WB / L2 WB cache
-READ 600
+WRITE 00000000000 a
+WRITE 00001000000 b
+WRITE 00010000000 c
+WRITE 00100000000 d
+#This one should cause the WB write
+WRITE 01000000000 e
+#This one should read from the WB
+READ 01000000000 f

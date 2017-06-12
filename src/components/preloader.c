@@ -6,28 +6,28 @@
 // Bits 44-53 cpu address address
 // bits 42-43 op code
 
+char *strtok_r (char *s, const char *delim, char **save_ptr);
+char* array[100];
+
 int parseTestFile(FILE *file) {
-    char *line = NULL;
     char *word = NULL;
     enum OP_CODE op = NOOP;
 
     size_t len = 0;
     int pc = 0;
 
-    while (getline(&line, &len, file) != -1) {
-        char* address = malloc(sizeof(char*));
-        char* data = malloc(sizeof(char*));
+    while (getline(&array[pc], &len, file) != -1) {
         // skip comment lines
-        if (line[0] == '#') {
+        if (array[pc][0] == '#') {
             continue;
         }
 
         // trim off the trailing new lines
-        line[strcspn(line, "\n\r")] = 0;
-        if(DEBUG) printf("\nWhole line string: [%s]\n", line);
+        array[pc][strcspn(array[pc], "\n\r")] = 0;
+        if(DEBUG) printf("\nWhole line string: [%s]\n", array[pc]);
 
         // Parse operation
-        word = strtok(line, " ");
+        word = strtok(array[pc], " ");
         if(DEBUG) printf("Operation string: [%s]\n", word);
 
         if (strcasecmp("READ", word) == 0) {
@@ -40,28 +40,11 @@ int parseTestFile(FILE *file) {
 
 
         // get address
-        char* word2 = strtok(NULL, " ");
-        if (NULL != word2) {
-            if (DEBUG) printf("Address found: [%s]\n", word2);
-            address = word2;
-        } else {
-            return ERR;
-        }
+        int addressRegister = loadRegister(strtok(NULL, " "));
 
         // Get either data or byte enable
-        char* word3= strtok(NULL, " ");
-        if(DEBUG) printf("Data found: [%s]\n", word3);
-        if (NULL != word3) {
-            data = word3;
-        } else {
-            return ERR;
-        }
+        int dataRegister = loadRegister(strtok(NULL, " "));
 
-
-        // Load data into register
-        int addressRegister = loadRegister(address);
-        int dataRegister = loadRegister(data);
-        fetchRegister(0);
         // load the instruction line into the cache
         int64_t instruction = op << 20 | (addressRegister << 10) | dataRegister;
         if(DEBUG) printf("Instruction data %ld\n", instruction);
@@ -90,3 +73,34 @@ int preLoadInstructionCache(const char *testFile) {
 
     return OK;
 }
+
+char *strtok_r (char *s, const char *delim, char **save_ptr) {
+    char *token;
+
+    if (s == NULL)
+        s = *save_ptr;
+
+    /* Scan leading delimiters.  */
+    s += strspn (s, delim);
+    if (*s == '\0')
+    {
+        *save_ptr = s;
+        return NULL;
+    }
+
+    /* Find the end of the token.  */
+    token = s;
+    s = strpbrk (token, delim);
+    if (s == NULL)
+        /* This token finishes the string.  */
+        *save_ptr = memchr(token, '\0', 64);
+    else
+    {
+        /* Terminate the token and make *SAVE_PTR point past it.  */
+        *s = '\0';
+        *save_ptr = s + 1;
+    }
+    return token;
+}
+
+

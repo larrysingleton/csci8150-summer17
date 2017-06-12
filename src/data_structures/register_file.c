@@ -10,8 +10,5 @@ int loadRegister(char* value) {
 }
 
 char* fetchRegister(int registerLocation) {
-    for(int i = 0; i < 4; i ++) {
-        if (DEBUG) printf("Register location %d: %s\n", i, registerFile[i]);
-    }
     return registerFile[registerLocation];
 }

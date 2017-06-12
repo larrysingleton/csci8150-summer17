@@ -10,7 +10,7 @@ void levelOneDataCacheManager() {
             enqueueL1DToL1C(fetchFromL1Cache((int) strtoll(frontItem->address, NULL, 2)),
                            frontItem->address,
                            frontItem->instruction,
-                            WRITE);
+                           WRITE);
 
         } else { // Write Request
             loadL1Cache((int) strtoll(frontItem->address, NULL, 2),

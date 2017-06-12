@@ -13,11 +13,10 @@ int parseTestFile(FILE *file) {
 
     size_t len = 0;
     int pc = 0;
-    char operation[2];
 
     while (getline(&line, &len, file) != -1) {
-        char* address;
-        char* data;
+        char* address = malloc(sizeof(char*));
+        char* data = malloc(sizeof(char*));
         // skip comment lines
         if (line[0] == '#') {
             continue;
@@ -39,33 +38,36 @@ int parseTestFile(FILE *file) {
             return ERR; // Only support read and write operations
         }
 
+
         // get address
-        word = strtok(NULL, " ");
-        if (NULL != word) {
-            if (DEBUG) printf("Address found: [%s]\n", word);
-            address = word;
+        char* word2 = strtok(NULL, " ");
+        if (NULL != word2) {
+            if (DEBUG) printf("Address found: [%s]\n", word2);
+            address = word2;
         } else {
             return ERR;
         }
 
         // Get either data or byte enable
-        word = strtok(NULL, " ");
-        if(DEBUG) printf("Data found: [%s]\n", word);
-
-        if (NULL != word) {
-            data = word;
+        char* word3= strtok(NULL, " ");
+        if(DEBUG) printf("Data found: [%s]\n", word3);
+        if (NULL != word3) {
+            data = word3;
         } else {
             return ERR;
         }
 
+
         // Load data into register
         int addressRegister = loadRegister(address);
         int dataRegister = loadRegister(data);
+        fetchRegister(0);
         // load the instruction line into the cache
         int64_t instruction = op << 20 | (addressRegister << 10) | dataRegister;
         if(DEBUG) printf("Instruction data %ld\n", instruction);
         loadInstructionCache(pc, instruction);
         if(DEBUG) printf("Instruction loaded into register %ld\n", fetchInstruction(pc));
+
         pc++;
     }
     return OK;

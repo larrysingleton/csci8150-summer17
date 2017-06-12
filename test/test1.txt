@@ -1,4 +1,4 @@
 # Single read
 # 17 bit address
 # 64 bytes in an address so 2^6 = 64 for 6 bit byte enable
-READ 00010000000 111111
+READ 00010000000 000001

@@ -10,7 +10,7 @@ int l2CacheController[812];
 int l2CacheControllerExtendedStatus[812];
 char* l2DataCache[2][409];
 
-#define l1CacheControlleraddress(i) (i & 0b0001111111111100)
+#define l1CacheControlleraddress(i) ((i & 0b0001111111111100) >> 2)
 
 int isInL2Cache(int address) {
     // There are 2048 possible memory addresses, we need to fit them into 256
@@ -71,10 +71,10 @@ void setL2RowStatus(int address, int cacheState) {
     int cacheControllerBlock = address % 409; // This will mean there are 8 possible address
 
     if(l2CacheController[cacheControllerBlock] >> 15 != 1) {
-        l2CacheController[cacheControllerBlock] = (0b100 << 13) & (address << 2);
+        l2CacheController[cacheControllerBlock] = (0b100 << 13) | (address << 2);
         l2CacheControllerExtendedStatus[cacheControllerBlock] = cacheState;
     } else {
-        l2CacheController[cacheControllerBlock * 2] = (0b100 << 13) & (address << 2);
+        l2CacheController[cacheControllerBlock * 2] = (0b100 << 13) | (address << 2);
         l2CacheControllerExtendedStatus[cacheControllerBlock * 2] = cacheState;
     }
 }

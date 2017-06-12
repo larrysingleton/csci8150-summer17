@@ -6,8 +6,13 @@ void processCPUToL1C();
 void processReturnValuesL1WBToL1C();
 void processReturnValuesL2CToL1C();
 void processReturnValuesVCToL1C();
+void processTempQueue();
+
 
 void L1() {
+    //Process temporary holding queue.
+    processTempQueue();
+
     // Process values coming back from past requests
     processReturnValuesL1DToL1C();
     processReturnValuesL1WBToL1C();
@@ -20,6 +25,30 @@ void L1() {
     levelOneDataCacheManager();
     victimCache();
     levelOneWriteBuffer();
+}
+
+void processTempQueue() {
+    // See if there is anything in the queue.
+    struct Queue *frontItem = frontL1Temp();
+    if(frontItem != NULL) {
+        int address = (int) strtoll(frontItem->address, NULL, 2);
+        int status = getL1RowStatus(address);
+        enum OP_CODE operation = (enum OP_CODE) frontItem->instruction >> 20;
+        if(getL1RowStatus(address) == READY && operation == READ) {
+            enqueueCPUToL1C(frontItem->data,
+                            frontItem->address,
+                            frontItem->instruction,
+                            frontItem->opCode);
+            dequeueL1Temp();
+        } else if(getL1RowStatus(address) == WR_ALLOC && operation == WRITE) {
+            enqueueCPUToL1C(frontItem->data,
+                            frontItem->address,
+                            frontItem->instruction,
+                            frontItem->opCode);
+            dequeueL1Temp();
+        }
+        // If the cache line isn't ready, just keep holding it in the queue
+    }
 }
 
 void processReturnValuesVCToL1C() {
@@ -103,22 +132,23 @@ void processReturnValuesL2CToL1C() {
     // See if there is anything in the queue.
     struct Queue *frontItem = frontL2CToL1C();
     if(frontItem != NULL) {
-        // Print Status
-        printf("L1C To CPU: Data(%s)\n", frontItem->address);
-
-        char *data = getDataByMask(frontItem->instruction, frontItem->data);
-
-        // Forward data onto CPU.
-        enqueueL1CToCPU(data,
-                        frontItem->address,
-                        frontItem->instruction,
-                        WRITE);
+        enum OP_CODE operation = (enum OP_CODE) frontItem->instruction >> 20;
+        if(operation == READ) {
+            char *data = getDataByMask(frontItem->instruction, frontItem->data);
+            printf("L1C To CPU: Data(%s)\n", frontItem->address);
+            // Forward data onto CPU.
+            enqueueL1CToCPU(data,
+                            frontItem->address,
+                            frontItem->instruction,
+                            WRITE);
+        }
 
         printf("L1C To L1D: Data(%s)\n", frontItem->address);
         enqueueL1CToL1D(frontItem->data,
                         frontItem->address,
                         frontItem->instruction,
                         WRITE);
+
 
         //remove the message from the queue
         dequeueL2CToL1C();
@@ -132,22 +162,28 @@ void processCPUToL1C() {
         int address = (int) strtoll(frontItem->address, NULL, 2);
         int inL1Cache = isInL1Cache(address);
         if (inL1Cache == HIT) {
-            // If it is in L1D then enqueue a message to fetch that data.
-            if(frontItem->instruction >> 20 == READ) {
-                printf("L1C to L1D: Hit, Read(%s)\n", frontItem->address);
-                enqueueL1CToL1D(NULL,
-                                frontItem->address,
-                                frontItem->instruction,
-                                READ);
+            if(getL1RowStatus(address) != READY && frontItem->opCode == READ) {
+                // Put the message at the end of the queue
+                enqueueL1Temp(frontItem->data,
+                              frontItem->address,
+                              frontItem->instruction,
+                              frontItem->opCode);
             } else {
-                printf("L1C to L1D: Hit, Write (%s)\n", frontItem->address);
-                enqueueL1CToL1D(frontItem->data,
-                                frontItem->address,
-                                frontItem->instruction,
-                                WRITE);
+                // If it is in L1D then enqueue a message to fetch that data.
+                if(frontItem->instruction >> 20 == READ) {
+                    printf("L1C to L1D: Hit, Read(%s)\n", frontItem->address);
+                    enqueueL1CToL1D(NULL,
+                                    frontItem->address,
+                                    frontItem->instruction,
+                                    READ);
+                } else {
+                    printf("L1C to L1D: Hit, Write (%s)\n", frontItem->address);
+                    enqueueL1CToL1D(frontItem->data,
+                                    frontItem->address,
+                                    frontItem->instruction,
+                                    WRITE);
+                }
             }
-
-
         } else if(isInVC(address) == 1) {
             // Basically no matter what all we ever do is read from the victim cache.
             if(frontItem->instruction >> 20 == READ) {
@@ -181,11 +217,16 @@ void processCPUToL1C() {
             }
             if(frontItem->instruction >> 20 == READ) {
                 printf("L1C to L2C: Miss, Read(%s)\n", frontItem->address);
+                setL1RowStatus(address, RD_WAIT_L2D);
             } else {
                 printf("L1C to L2C: Miss, Write(%s)\n", frontItem->address);
+                setL1RowStatus(address, WR_WAIT_L2D);
+                enqueueL1Temp(frontItem->data,
+                            frontItem->address,
+                            frontItem->instruction,
+                            WRITE);
             }
 
-            setL1RowStatus(address, RD_WAIT_L2D);
             enqueueL1CToL2C(NULL,
                             frontItem->address,
                             frontItem->instruction,

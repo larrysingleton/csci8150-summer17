@@ -41,6 +41,6 @@ set(SOURCE_FILES
         data_structures/queues/l2c_to_mem_queue.c
         data_structures/queues/l2d_to_l2c_queue.c
         data_structures/queues/l2wb_to_l2c_queueu.c
-        data_structures/queues/mem_to_l2c_queue.c)
+        data_structures/queues/mem_to_l2c_queue.c data_structures/queues/l1_temp_queue.c)
 
 add_executable(CSCI8150 ${SOURCE_FILES} main.c)

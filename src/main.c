@@ -45,7 +45,8 @@ int inProgress() {
         frontL2CToL2WB() != NULL ||
         frontL2CToL2D() != NULL ||
         frontL2CToMem() != NULL ||
-        frontMemToL2C() != NULL) {
+        frontMemToL2C() != NULL ||
+        frontL1Temp() != NULL) {
         return OK;
     }
     return ERR;

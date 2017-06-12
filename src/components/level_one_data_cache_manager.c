@@ -7,7 +7,7 @@ void levelOneDataCacheManager() {
             // Print Status
             printf("L1D To L1C: Data(%s)\n", frontItem->address);
             // Forward data onto CPU.
-            enqueueL2DToL2C(fetchFromL1Cache((int) strtoll(frontItem->address, NULL, 2)),
+            enqueueL1DToL1C(fetchFromL1Cache((int) strtoll(frontItem->address, NULL, 2)),
                            frontItem->address,
                            frontItem->instruction,
                             WRITE);

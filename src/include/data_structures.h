@@ -20,6 +20,7 @@ void victimizeL1(int address);
 void setL1RowStatus(int address, int status);
 void loadL1Cache(int address, char* data);
 char* fetchFromL1Cache(int address);
+int getL1RowStatus(int address);
 
 // Victim cache
 int isInVC(int address);
@@ -118,6 +119,10 @@ void enqueueMemToL2C(char* data, char* address, int64_t instruction, int opCode)
 void dequeueMemToL2C();
 struct Queue* frontMemToL2C();
 
+void enqueueL1Temp(char* data, char* address, int64_t instruction, int opCode);
+void dequeueL1Temp();
+struct Queue* frontL1Temp();
+
 enum CHACHE_STATE {
     MISS_I = 0,
     MISS_C = 1,
@@ -133,8 +138,9 @@ enum TRANS_STATE {
     RD_WAIT_MEM = 4,
     WR_WAIT_L2D = 5,
     WR_WAIT_VC = 6,
-    READY = 7,
-    WR_WAIT_MEM = 8
+    WR_ALLOC = 7,
+    READY = 8,
+    WR_WAIT_MEM = 9
 };
 
 enum OP_CODE {

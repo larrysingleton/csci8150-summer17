@@ -1,5 +1,6 @@
 #include <main.h>
 
+char* custom_itoa(int val, int base);
 char* getDataByMask(int64_t instruction, char *data);
 void processReturnValuesL1DToL1C();
 void processCPUToL1C();
@@ -214,9 +215,8 @@ void processCPUToL1C() {
             if (inL1Cache == MISS_D) {
                 printf("L1C to L1D: Miss, Victimize(%s)\n", frontItem->address);
                 char *data = fetchFromL1Cache(address);
-                char* evictedAddress = NULL;
                 int evictedAddressInt = victimizeL1(address);
-                itoa(evictedAddressInt, evictedAddress, 2);
+                char* evictedAddress = custom_itoa(evictedAddressInt, 2);
 
                 printf("L1C to L1WB: Write(%s)\n", evictedAddress);
                 enqueueL1CToL1WB(data,
@@ -227,9 +227,8 @@ void processCPUToL1C() {
             if(inL1Cache == MISS_C) {
                 printf("L1C to L1D: Miss, Victimize(%s)\n", frontItem->address);
                 char *data = fetchFromL1Cache(address);
-                char* evictedAddress = NULL;
                 int evictedAddressInt = victimizeL1(address);
-                itoa(evictedAddressInt, evictedAddress, 2);
+                char* evictedAddress = custom_itoa(evictedAddressInt, 2);
 
                 printf("L1C to VC: Write(%s)\n", evictedAddress);
                 enqueueL1CToVC(data,
@@ -267,4 +266,12 @@ char* getDataByMask(int64_t instruction, char *data) {
     if(data != NULL)
         newData = &data[dataMask];
     return newData;
+}
+
+char* custom_itoa(int val, int base){
+    static char buf[32] = {0};
+    int i = 30;
+    for(; val && i ; --i, val /= base)
+        buf[i] = "0123456789abcdef"[val % base];
+    return &buf[i+1];
 }

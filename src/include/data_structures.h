@@ -16,7 +16,7 @@ char* fetchMemoryBlock(int address);
 
 // L1 Cache
 int isInL1Cache(int address);
-void victimizeL1(int address);
+int victimizeL1(int address);
 void setL1RowStatus(int address, int status);
 void loadL1Cache(int address, char* data);
 char* fetchFromL1Cache(int address);

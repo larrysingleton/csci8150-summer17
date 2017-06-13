@@ -40,7 +40,7 @@ void processTempQueue() {
                             frontItem->instruction,
                             frontItem->opCode);
             dequeueL1Temp();
-        } else if(getL1RowStatus(address) == WR_ALLOC && operation == WRITE) {
+        } else if((getL1RowStatus(address) == WR_ALLOC || getL1RowStatus(address) == READY)&& operation == WRITE) {
             enqueueCPUToL1C(frontItem->data,
                             frontItem->address,
                             frontItem->instruction,
@@ -162,7 +162,8 @@ void processCPUToL1C() {
         int address = (int) strtoll(frontItem->address, NULL, 2);
         int inL1Cache = isInL1Cache(address);
         if (inL1Cache == HIT) {
-            if(getL1RowStatus(address) != READY && frontItem->opCode == READ) {
+            if((getL1RowStatus(address) != READY && frontItem->opCode == READ) ||
+                    (getL1RowStatus(address) != READY && getL1RowStatus(address) != WR_ALLOC && frontItem->opCode == WRITE)) {
                 // Put the message at the end of the queue
                 enqueueL1Temp(frontItem->data,
                               frontItem->address,
@@ -213,7 +214,29 @@ void processCPUToL1C() {
         } else { // Cache miss
             if (inL1Cache == MISS_D) {
                 printf("L1C to L1D: Miss, Victimize(%s)\n", frontItem->address);
-                victimizeL1(address);
+                char *data = fetchFromL1Cache(address);
+                char* evictedAddress = NULL;
+                int evictedAddressInt = victimizeL1(address);
+                itoa(evictedAddressInt, evictedAddress, 2);
+
+                printf("L1C to L1WB: Write(%s)\n", evictedAddress);
+                enqueueL1CToL1WB(data,
+                                 evictedAddress,
+                                 NULL,
+                                 WRITE);
+            }
+            if(inL1Cache == MISS_C) {
+                printf("L1C to L1D: Miss, Victimize(%s)\n", frontItem->address);
+                char *data = fetchFromL1Cache(address);
+                char* evictedAddress = NULL;
+                int evictedAddressInt = victimizeL1(address);
+                itoa(evictedAddressInt, evictedAddress, 2);
+
+                printf("L1C to VC: Write(%s)\n", evictedAddress);
+                enqueueL1CToVC(data,
+                                 evictedAddress,
+                                 NULL,
+                                 WRITE);
             }
             if(frontItem->instruction >> 20 == READ) {
                 printf("L1C to L2C: Miss, Read(%s)\n", frontItem->address);

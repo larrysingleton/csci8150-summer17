@@ -6,6 +6,7 @@
 // Bit 3-LRU
 // Bit 4-14 address
 // Bit 15-16 cache state
+
 int l1CacheController[256];
 int l1CacheControllerExtendedStatus[256];
 char* l1DataCache[4][64];
@@ -50,8 +51,22 @@ int isInL1Cache(int address) {
     }
 }
 
-void victimizeL1(int address) {
+int victimizeL1(int address) {
+    int cacheControllerBlock = address % 64; // This will mean there are 8 possible address
 
+    if((l1CacheController[cacheControllerBlock] >> 12 & 001) != 1) {
+        l1DataCache[0][cacheControllerBlock] = NULL;
+        return l1CacheController[cacheControllerBlock * 2] >> 2 & 0b00011111111111;
+    } else if ((l1CacheController[cacheControllerBlock] >> 12 & 001) != 1) {
+        l1DataCache[1][cacheControllerBlock * 2] = NULL;
+        return l1CacheController[cacheControllerBlock * 2] >> 2 & 0b00011111111111;
+    } else if ((l1CacheController[cacheControllerBlock * 3] >> 12 & 001) != 1) {
+        l1DataCache[2][cacheControllerBlock * 3] = NULL;
+        return l1CacheController[cacheControllerBlock * 3] >> 2 & 0b00011111111111;
+    } else {
+        l1DataCache[3][cacheControllerBlock * 4] = NULL;
+        return l1CacheController[cacheControllerBlock * 4] >> 2 & 0b00011111111111;
+    }
 }
 
 

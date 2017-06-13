@@ -20,28 +20,28 @@ int isInL1Cache(int address) {
     // Check if the record is in the cache.
     if ((l1CacheController[cacheControllerBlock] >> 15 == 1 &&
             l1CacheControlleraddress(l1CacheController[cacheControllerBlock]) == address) ||
-        (l1CacheController[cacheControllerBlock * 2] >> 15 == 1 &&
+        (l1CacheController[cacheControllerBlock + 64] >> 15 == 1 &&
             l1CacheControlleraddress(l1CacheController[cacheControllerBlock]) == address) ||
-        (l1CacheController[cacheControllerBlock * 3] >> 15 == 1 &&
+        (l1CacheController[cacheControllerBlock + 128] >> 15 == 1 &&
             l1CacheControlleraddress(l1CacheController[cacheControllerBlock]) == address) ||
-        (l1CacheController[cacheControllerBlock * 4] >> 15 == 1 &&
+        (l1CacheController[cacheControllerBlock + 192] >> 15 == 1 &&
             l1CacheControlleraddress(l1CacheController[cacheControllerBlock]) == address)) {
         return HIT;
     }
 
     // Check if any of them are just empty.
     else if(l1CacheController[cacheControllerBlock] >> 15 == 0 ||
-            l1CacheController[cacheControllerBlock * 2] >> 15 == 0 ||
-            l1CacheController[cacheControllerBlock * 3] >> 15 == 0 ||
-            l1CacheController[cacheControllerBlock * 4] >> 15 == 0) {
+            l1CacheController[cacheControllerBlock + 64] >> 15 == 0 ||
+            l1CacheController[cacheControllerBlock + 128] >> 15 == 0 ||
+            l1CacheController[cacheControllerBlock + 192] >> 15 == 0) {
         return MISS_I;
     }
 
     // Check if any of them are populated, but don't need to be written.
     else if(l1CacheController[cacheControllerBlock] >> 15 == 0 ||
-            l1CacheController[cacheControllerBlock * 2] >> 15 == 0 ||
-            l1CacheController[cacheControllerBlock *3] >> 15 == 0 ||
-        l1CacheController[cacheControllerBlock * 4] >> 15 == 0) {
+            l1CacheController[cacheControllerBlock + 64] >> 15 == 0 ||
+            l1CacheController[cacheControllerBlock + 128] >> 15 == 0 ||
+            l1CacheController[cacheControllerBlock + 192] >> 15 == 0) {
         return MISS_C;
     }
 
@@ -56,16 +56,16 @@ int victimizeL1(int address) {
 
     if((l1CacheController[cacheControllerBlock] >> 12 & 001) != 1) {
         l1DataCache[0][cacheControllerBlock] = NULL;
-        return l1CacheController[cacheControllerBlock * 2] >> 2 & 0b00011111111111;
+        return l1CacheController[cacheControllerBlock + 64] >> 2 & 0b00011111111111;
     } else if ((l1CacheController[cacheControllerBlock] >> 12 & 001) != 1) {
-        l1DataCache[1][cacheControllerBlock * 2] = NULL;
-        return l1CacheController[cacheControllerBlock * 2] >> 2 & 0b00011111111111;
-    } else if ((l1CacheController[cacheControllerBlock * 3] >> 12 & 001) != 1) {
-        l1DataCache[2][cacheControllerBlock * 3] = NULL;
-        return l1CacheController[cacheControllerBlock * 3] >> 2 & 0b00011111111111;
+        l1DataCache[1][cacheControllerBlock + 64] = NULL;
+        return l1CacheController[cacheControllerBlock + 64] >> 2 & 0b00011111111111;
+    } else if ((l1CacheController[cacheControllerBlock + 128] >> 12 & 001) != 1) {
+        l1DataCache[2][cacheControllerBlock + 128] = NULL;
+        return l1CacheController[cacheControllerBlock + 128] >> 2 & 0b00011111111111;
     } else {
-        l1DataCache[3][cacheControllerBlock * 4] = NULL;
-        return l1CacheController[cacheControllerBlock * 4] >> 2 & 0b00011111111111;
+        l1DataCache[3][cacheControllerBlock + 192] = NULL;
+        return l1CacheController[cacheControllerBlock + 192] >> 2 & 0b00011111111111;
     }
 }
 
@@ -76,9 +76,9 @@ char* fetchFromL1Cache(int address) {
 
     if(l1CacheControlleraddress(l1CacheController[cacheControllerBlock]) == address) {
         return l1DataCache[0][cacheControllerBlock];
-    } else if (l1CacheControlleraddress(l1CacheController[cacheControllerBlock * 2]) == address) {
+    } else if (l1CacheControlleraddress(l1CacheController[cacheControllerBlock + 64]) == address) {
         return l1DataCache[1][cacheControllerBlock];
-    } else if (l1CacheControlleraddress(l1CacheController[cacheControllerBlock * 3]) == address) {
+    } else if (l1CacheControlleraddress(l1CacheController[cacheControllerBlock + 128]) == address) {
         return l1DataCache[2][cacheControllerBlock];
     } else {
         return l1DataCache[3][cacheControllerBlock];
@@ -96,26 +96,26 @@ void loadL1Cache(int address, char* data) {
         } else if (l1CacheControllerExtendedStatus[cacheControllerBlock] == WR_ALLOC) {
             l1CacheControllerExtendedStatus[cacheControllerBlock] = READY;
         }
-    } else if (l1CacheControlleraddress(l1CacheController[cacheControllerBlock * 2]) == address){
+    } else if (l1CacheControlleraddress(l1CacheController[cacheControllerBlock + 64]) == address){
         l1DataCache[1][cacheControllerBlock] = data;
-        if (l1CacheControllerExtendedStatus[cacheControllerBlock * 2] == WR_WAIT_L2D) {
-            l1CacheControllerExtendedStatus[cacheControllerBlock * 2] = WR_ALLOC;
-        } else if (l1CacheControllerExtendedStatus[cacheControllerBlock * 2] == WR_ALLOC) {
-            l1CacheControllerExtendedStatus[cacheControllerBlock * 2] = READY;
+        if (l1CacheControllerExtendedStatus[cacheControllerBlock + 64] == WR_WAIT_L2D) {
+            l1CacheControllerExtendedStatus[cacheControllerBlock + 64] = WR_ALLOC;
+        } else if (l1CacheControllerExtendedStatus[cacheControllerBlock + 64] == WR_ALLOC) {
+            l1CacheControllerExtendedStatus[cacheControllerBlock + 64] = READY;
         }
-    } else if (l1CacheControlleraddress(l1CacheController[cacheControllerBlock * 3]) == address){
+    } else if (l1CacheControlleraddress(l1CacheController[cacheControllerBlock + 128]) == address){
         l1DataCache[2][cacheControllerBlock] = data;
-        if (l1CacheControllerExtendedStatus[cacheControllerBlock * 3] == WR_WAIT_L2D) {
-            l1CacheControllerExtendedStatus[cacheControllerBlock * 3] = WR_ALLOC;
-        } else if (l1CacheControllerExtendedStatus[cacheControllerBlock * 3] == WR_ALLOC) {
-            l1CacheControllerExtendedStatus[cacheControllerBlock * 3] = READY;
+        if (l1CacheControllerExtendedStatus[cacheControllerBlock + 128] == WR_WAIT_L2D) {
+            l1CacheControllerExtendedStatus[cacheControllerBlock + 128] = WR_ALLOC;
+        } else if (l1CacheControllerExtendedStatus[cacheControllerBlock + 128] == WR_ALLOC) {
+            l1CacheControllerExtendedStatus[cacheControllerBlock + 128] = READY;
         }
     } else {
         l1DataCache[3][cacheControllerBlock] = data;
-        if (l1CacheControllerExtendedStatus[cacheControllerBlock * 4] == WR_WAIT_L2D) {
-            l1CacheControllerExtendedStatus[cacheControllerBlock * 4] = WR_ALLOC;
-        } else if (l1CacheControllerExtendedStatus[cacheControllerBlock * 4] == WR_ALLOC) {
-            l1CacheControllerExtendedStatus[cacheControllerBlock * 4] = READY;
+        if (l1CacheControllerExtendedStatus[cacheControllerBlock + 192] == WR_WAIT_L2D) {
+            l1CacheControllerExtendedStatus[cacheControllerBlock + 192] = WR_ALLOC;
+        } else if (l1CacheControllerExtendedStatus[cacheControllerBlock + 192] == WR_ALLOC) {
+            l1CacheControllerExtendedStatus[cacheControllerBlock + 192] = READY;
         }
     }
 }
@@ -127,15 +127,15 @@ void setL1RowStatus(int address, int cacheState) {
     if(l1CacheController[cacheControllerBlock] >> 15 != 1) {
         l1CacheController[cacheControllerBlock] = (0b100 << 13) | (address << 2);
         l1CacheControllerExtendedStatus[cacheControllerBlock] = cacheState;
-    } else if (l1CacheController[cacheControllerBlock * 2] >> 15 != 1){
-        l1CacheController[cacheControllerBlock * 2] = (0b100 << 13) | (address << 2);
-        l1CacheControllerExtendedStatus[cacheControllerBlock * 2] = cacheState;
-    } else if (l1CacheController[cacheControllerBlock * 3] >> 15 != 1){
-        l1CacheController[cacheControllerBlock * 3] = (0b100 << 13) | (address << 2);
-        l1CacheControllerExtendedStatus[cacheControllerBlock * 3] = cacheState;
-    } else if (l1CacheController[cacheControllerBlock * 4] >> 15 != 1) {
-        l1CacheController[cacheControllerBlock * 4] = (0b100 << 13) | (address << 2);
-        l1CacheControllerExtendedStatus[cacheControllerBlock * 4] = cacheState;
+    } else if (l1CacheController[cacheControllerBlock + 64] >> 15 != 1){
+        l1CacheController[cacheControllerBlock + 64] = (0b100 << 13) | (address << 2);
+        l1CacheControllerExtendedStatus[cacheControllerBlock + 64] = cacheState;
+    } else if (l1CacheController[cacheControllerBlock + 128] >> 15 != 1){
+        l1CacheController[cacheControllerBlock + 128] = (0b100 << 13) | (address << 2);
+        l1CacheControllerExtendedStatus[cacheControllerBlock + 128] = cacheState;
+    } else if (l1CacheController[cacheControllerBlock + 192] >> 15 != 1) {
+        l1CacheController[cacheControllerBlock + 192] = (0b100 << 13) | (address << 2);
+        l1CacheControllerExtendedStatus[cacheControllerBlock + 192] = cacheState;
     }
 }
 
@@ -144,11 +144,11 @@ int getL1RowStatus(int address) {
 
     if(l1CacheControlleraddress(l1CacheController[cacheControllerBlock]) == address) {
         return l1CacheControllerExtendedStatus[cacheControllerBlock];
-    } else if (l1CacheControlleraddress(l1CacheController[cacheControllerBlock * 2]) == address) {
-        return l1CacheControllerExtendedStatus[cacheControllerBlock * 2];
-    } else if (l1CacheControlleraddress(l1CacheController[cacheControllerBlock * 3]) == address) {
-        return l1CacheControllerExtendedStatus[cacheControllerBlock * 3];
+    } else if (l1CacheControlleraddress(l1CacheController[cacheControllerBlock + 64]) == address) {
+        return l1CacheControllerExtendedStatus[cacheControllerBlock + 64];
+    } else if (l1CacheControlleraddress(l1CacheController[cacheControllerBlock + 128]) == address) {
+        return l1CacheControllerExtendedStatus[cacheControllerBlock + 128];
     } else {
-        return l1CacheControllerExtendedStatus[cacheControllerBlock * 4];
+        return l1CacheControllerExtendedStatus[cacheControllerBlock + 192];
     }
 }

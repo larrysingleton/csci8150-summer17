@@ -11,7 +11,7 @@ void MEM() {
 
 void processMemTemp() {
     struct Queue* frontItem = frontMemTemp();
-    if(frontItem != NULL) {
+    while(frontItem != NULL) {
         if(frontItem->delay == 0) { // If it has waited enough cycles.
             int address = atoi(frontItem->address);
             if(frontItem->opCode == READ) {
@@ -28,6 +28,7 @@ void processMemTemp() {
         } else { // Still transferring data.
             frontItem->delay = frontItem->delay - 1;
         }
+        frontItem = frontItem->next;
     }
 }
 
@@ -45,4 +46,3 @@ void processL2CToMEM() {
         dequeueL2CToMem();
     }
 }
-

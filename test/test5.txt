@@ -1,7 +1,10 @@
 # Read from L1 victim cache
+WRITE 00100000000 abc
 READ 00000000000 000000
 READ 00001000000 000000
 READ 00010000000 000000
 READ 00100000000 000000
-#This one should cause the VC read
+#This one should cause the VC load
 READ 01000000000 000000
+# This one should read from the VC
+READ 00100000000 000000

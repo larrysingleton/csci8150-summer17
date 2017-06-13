@@ -1,4 +1,4 @@
-#include "main.h"
+#include <main.h>
 
 char* getDataByMask(int64_t instruction, char *data);
 void processReturnValuesL1DToL1C();
@@ -32,7 +32,6 @@ void processTempQueue() {
     struct Queue *frontItem = frontL1Temp();
     if(frontItem != NULL) {
         int address = (int) strtoll(frontItem->address, NULL, 2);
-        int status = getL1RowStatus(address);
         enum OP_CODE operation = (enum OP_CODE) frontItem->instruction >> 20;
         if(getL1RowStatus(address) == READY && operation == READ) {
             enqueueCPUToL1C(frontItem->data,
@@ -222,7 +221,7 @@ void processCPUToL1C() {
                 printf("L1C to L1WB: Write(%s)\n", evictedAddress);
                 enqueueL1CToL1WB(data,
                                  evictedAddress,
-                                 NULL,
+                                 0,
                                  WRITE);
             }
             if(inL1Cache == MISS_C) {
@@ -235,7 +234,7 @@ void processCPUToL1C() {
                 printf("L1C to VC: Write(%s)\n", evictedAddress);
                 enqueueL1CToVC(data,
                                  evictedAddress,
-                                 NULL,
+                                 0,
                                  WRITE);
             }
             if(frontItem->instruction >> 20 == READ) {

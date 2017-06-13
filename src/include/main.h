@@ -11,8 +11,8 @@
 #include <stdint.h>
 #include <sys/stat.h>
 
-#include "data_structures.h"
-#include "components.h"
+#include <data_structures.h>
+#include <components.h>
 
 #define OK 1
 #define ERR -1

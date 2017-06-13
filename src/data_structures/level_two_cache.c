@@ -19,20 +19,20 @@ int isInL2Cache(int address) {
     // Check if the record is in the cache.
     if ((l2CacheController[cacheControllerBlock] >> 15 == 1 &&
          l1CacheControlleraddress(l2CacheController[cacheControllerBlock]) == address) ||
-        (l2CacheController[cacheControllerBlock * 2] >> 15 == 1 &&
+        (l2CacheController[cacheControllerBlock + 409] >> 15 == 1 &&
          l1CacheControlleraddress(l2CacheController[cacheControllerBlock]) == address)) {
         return HIT;
     }
 
         // Check if any of them are just empty.
     else if(l2CacheController[cacheControllerBlock] >> 15 == 0 ||
-            l2CacheController[cacheControllerBlock + 1] >> 15 == 0) {
+            l2CacheController[cacheControllerBlock + 409] >> 15 == 0) {
         return MISS_I;
     }
 
         // Check if any of them are populated, but don't need to be written.
     else if(l2CacheController[cacheControllerBlock] >> 15 == 0 ||
-            l2CacheController[cacheControllerBlock + 1] >> 15 == 0) {
+            l2CacheController[cacheControllerBlock + 409] >> 15 == 0) {
         return MISS_C;
     }
 
@@ -62,7 +62,7 @@ void loadL2Cache(int address, char* data) {
         l2CacheControllerExtendedStatus[cacheControllerBlock] = READY;
     } else {
         l2DataCache[1][cacheControllerBlock] = data;
-        l2CacheControllerExtendedStatus[cacheControllerBlock * 2] = READY;
+        l2CacheControllerExtendedStatus[cacheControllerBlock + 409] = READY;
     }
 }
 
@@ -74,7 +74,7 @@ void setL2RowStatus(int address, int cacheState) {
         l2CacheController[cacheControllerBlock] = (0b100 << 13) | (address << 2);
         l2CacheControllerExtendedStatus[cacheControllerBlock] = cacheState;
     } else {
-        l2CacheController[cacheControllerBlock * 2] = (0b100 << 13) | (address << 2);
-        l2CacheControllerExtendedStatus[cacheControllerBlock * 2] = cacheState;
+        l2CacheController[cacheControllerBlock + 409] = (0b100 << 13) | (address << 2);
+        l2CacheControllerExtendedStatus[cacheControllerBlock + 409] = cacheState;
     }
 }

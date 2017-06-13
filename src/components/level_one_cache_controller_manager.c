@@ -213,6 +213,7 @@ void processCPUToL1C() {
             }
         } else { // Cache miss
             if (inL1Cache == MISS_D) {
+                // TODO: Put request on hold if the rows is waiting for other data.
                 printf("L1C to L1D: Miss, Victimize(%s)\n", frontItem->address);
                 char *data = fetchFromL1Cache(address);
                 int evictedAddressInt = victimizeL1(address);
@@ -225,6 +226,7 @@ void processCPUToL1C() {
                                  WRITE);
             }
             if(inL1Cache == MISS_C) {
+                // TODO: Put request on hold if the rows is waiting for other data.
                 printf("L1C to L1D: Miss, Victimize(%s)\n", frontItem->address);
                 char *data = fetchFromL1Cache(address);
                 int evictedAddressInt = victimizeL1(address);

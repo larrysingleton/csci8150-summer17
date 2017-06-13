@@ -38,10 +38,10 @@ int isInL1Cache(int address) {
     }
 
     // Check if any of them are populated, but don't need to be written.
-    else if(l1CacheController[cacheControllerBlock] >> 15 == 0 ||
-            l1CacheController[cacheControllerBlock + 64] >> 15 == 0 ||
-            l1CacheController[cacheControllerBlock + 128] >> 15 == 0 ||
-            l1CacheController[cacheControllerBlock + 192] >> 15 == 0) {
+    else if(((l1CacheController[cacheControllerBlock] >> 14) & 0b01) == 0 ||
+            ((l1CacheController[cacheControllerBlock + 64] >> 14) & 0b01) == 0 ||
+            ((l1CacheController[cacheControllerBlock + 128] >> 14) & 0b01) == 0 ||
+            ((l1CacheController[cacheControllerBlock + 192] >> 14) & 0b01) == 0) {
         return MISS_C;
     }
 
@@ -71,6 +71,7 @@ int victimizeL1(int address) {
 
 
 char* fetchFromL1Cache(int address) {
+    // TODO: Setup LRU bit.
     // There are 2048 possible memory addresses, we need to fit them into 256
     int cacheControllerBlock = address % 64; // This will mean there are 8 possible address
 
@@ -86,6 +87,7 @@ char* fetchFromL1Cache(int address) {
 }
 
 void loadL1Cache(int address, char* data) {
+    // TODO: Set dirty BIT when switching from WR_ALLOC to READY
     // There are 2048 possible memory addresses, we need to fit them into 256
     int cacheControllerBlock = address % 64; // This will mean there are 8 possible address
 

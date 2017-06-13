@@ -10,7 +10,7 @@ void MEM() {
 }
 
 void processMemTemp() {
-    struct Queue* frontItem = frontMemTemp();
+    struct node* frontItem = frontMemTemp();
     while(frontItem != NULL) {
         if(frontItem->delay == 0) { // If it has waited enough cycles.
             int address = atoi(frontItem->address);
@@ -24,11 +24,15 @@ void processMemTemp() {
             } else { // Write request.
                 loadMemoryBlock(address, frontItem->data);
             }
-            dequeueMemTemp();
+            deleteMemTemp(frontItem->address);
         } else { // Still transferring data.
             frontItem->delay = frontItem->delay - 1;
         }
-        frontItem = frontItem->next;
+        if(frontItem->next != frontItem) {
+            frontItem = frontItem->next;
+        } else {
+            frontItem = NULL;
+        }
     }
 }
 
@@ -37,7 +41,7 @@ void processL2CToMEM() {
     struct Queue* frontItem = frontL2CToMem();
     if(frontItem != NULL) {
         // Put the request in the delay queue.
-        enqueueMemTemp(frontItem->data,
+        insertLastMemTemp(frontItem->data,
                        frontItem->address,
                        frontItem->instruction,
                        frontItem->opCode,

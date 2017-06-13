@@ -53,7 +53,6 @@ typedef struct Queue {
     char* address; // The address of the data that was fetched
     int opCode;
     int64_t instruction;
-    int delay;
 } queue;
 
 void enqueueCPUToL1C(char* data, char* address, int64_t instruction, int opCode);
@@ -124,9 +123,20 @@ void enqueueL1Temp(char* data, char* address, int64_t instruction, int opCode);
 void dequeueL1Temp();
 struct Queue* frontL1Temp();
 
-void enqueueMemTemp(char* data, char* address, int64_t instruction, int opCode, int delay);
-void dequeueMemTemp();
-struct Queue* frontMemTemp();
+typedef struct node {
+    char* data; //The data in the queue
+    char* address; // The address of the data that was fetched
+    int opCode;
+    int64_t instruction;
+    int delay;
+    struct node *next;
+    struct node *prev;
+};
+
+struct node* deleteMemTemp(char* address);
+void insertLastMemTemp(char* data, char* address, int64_t instruction, int opCode, int delay);
+struct node* frontMemTemp();
+
 
 enum CHACHE_STATE {
     MISS_I = 0,

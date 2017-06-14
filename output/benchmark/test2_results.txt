@@ -1,0 +1,54 @@
+
+ Memory Subsystem starting...
+
+==================================================
+Loading instruction cache from: [test/test2.txt]
+Whole line string: [WRITE 00010000000 abcdef]
+Operation string: [WRITE]
+Instruction data 2097153
+Instruction loaded into register 2097153
+
+Whole line string: [READ 00010000000 000000]
+Operation string: [READ]
+Instruction data 1050627
+Instruction loaded into register 1050627
+
+==================================================
+
+Beginning clock cycle 0
+CPU to L1C: CPUWrite(00010000000) Data(abcdef)
+L1C to L2C: Miss, Write(00010000000)
+L2C to MEM: Miss, Write(00010000000)
+Beginning clock cycle 1
+CPU to L1C: CPURead(00010000000)
+Beginning clock cycle 2
+Beginning clock cycle 3
+Beginning clock cycle 4
+Beginning clock cycle 5
+Beginning clock cycle 6
+Beginning clock cycle 7
+Beginning clock cycle 8
+Beginning clock cycle 9
+Beginning clock cycle 10
+Beginning clock cycle 11
+Beginning clock cycle 12
+Beginning clock cycle 13
+Beginning clock cycle 14
+Beginning clock cycle 15
+Beginning clock cycle 16
+Beginning clock cycle 17
+MEM to L2C: Data(00010000000)
+Beginning clock cycle 18
+L2C To L1C: Data(00010000000)
+L2C To L2D: Data(00010000000)
+Beginning clock cycle 19
+L1C To L1D: Data(00010000000)
+Beginning clock cycle 20
+L1C to L1D: Hit, Write (00010000000)
+Beginning clock cycle 21
+L1C to L1D: Hit, Read(00010000000)
+L1D To L1C: Data(00010000000)
+Beginning clock cycle 22
+L1C To CPU: Data(00010000000)
+Beginning clock cycle 23
+CPU: address: (00010000000) value: abcdef

@@ -142,7 +142,8 @@ enum CHACHE_STATE {
     MISS_I = 0,
     MISS_C = 1,
     MISS_D = 2,
-    HIT = 3
+    HIT = 3,
+    BUSY = 4
 };
 
 enum TRANS_STATE {

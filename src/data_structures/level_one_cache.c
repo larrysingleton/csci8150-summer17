@@ -11,7 +11,7 @@ int l1CacheController[256];
 int l1CacheControllerExtendedStatus[256];
 char* l1DataCache[4][64];
 
-#define l1CacheControlleraddress(i) ((i & 0b0001111111111100) >> 2)
+#define l1CacheControlleraddress(i) ((i >> 2) & 0b00011111111111)
 
 int isInL1Cache(int address) {
     // There are 2048 possible memory addresses, we need to fit them into 256
@@ -37,6 +37,16 @@ int isInL1Cache(int address) {
         return MISS_I;
     }
 
+    else if ((l1CacheController[cacheControllerBlock] >> 15 == 1 &&
+                l1CacheControllerExtendedStatus[cacheControllerBlock] != READY) &&
+            (l1CacheController[cacheControllerBlock + 64] >> 15 == 1 &&
+                l1CacheControllerExtendedStatus[cacheControllerBlock + 64] != READY) &&
+            (l1CacheController[cacheControllerBlock + 128] >> 15 == 1 &&
+                l1CacheControllerExtendedStatus[cacheControllerBlock + 128] != READY) &&
+            (l1CacheController[cacheControllerBlock + 192] >> 15 == 1 &&
+                l1CacheControllerExtendedStatus[cacheControllerBlock + 192] != READY)){
+            return BUSY;
+    }
     // Check if any of them are populated, but don't need to be written.
     else if(((l1CacheController[cacheControllerBlock] >> 14) & 0b01) == 0 ||
             ((l1CacheController[cacheControllerBlock + 64] >> 14) & 0b01) == 0 ||
@@ -150,7 +160,7 @@ int getL1RowStatus(int address) {
         return l1CacheControllerExtendedStatus[cacheControllerBlock + 64];
     } else if (l1CacheControlleraddress(l1CacheController[cacheControllerBlock + 128]) == address) {
         return l1CacheControllerExtendedStatus[cacheControllerBlock + 128];
-    } else {
+    } else if (l1CacheControlleraddress(l1CacheController[cacheControllerBlock + 192]) == address){
         return l1CacheControllerExtendedStatus[cacheControllerBlock + 192];
     }
 }

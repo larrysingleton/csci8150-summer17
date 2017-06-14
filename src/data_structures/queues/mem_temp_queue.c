@@ -20,9 +20,11 @@ void insertLastMemTemp(char* data, char* address, int64_t instruction, int opCod
     link->instruction = instruction;
     link->opCode = opCode;
     link->delay = delay;
+    link->next = NULL;
 
     if(frontMemTemp() == NULL) {
         //make it the lastMemTemp link
+        headMemTemp = link;
         lastMemTemp = link;
     } else {
         //make link a new lastMemTemp link

@@ -46,6 +46,12 @@ void processTempQueue() {
                             frontItem->instruction,
                             frontItem->opCode);
             dequeueL1Temp();
+        } if(isInL1Cache(address) != HIT && isInL1Cache(address) != BUSY) {
+            enqueueCPUToL1C(frontItem->data,
+                            frontItem->address,
+                            frontItem->instruction,
+                            frontItem->opCode);
+            dequeueL1Temp();
         }
         // If the cache line isn't ready, just keep holding it in the queue
     }
@@ -198,7 +204,7 @@ void processCPUToL1C() {
                         frontItem->instruction,
                         READ);
         } else if(isInL1WB(address) == 1) {
-            if(frontItem->instruction >> 20 == READ) {
+            if (frontItem->instruction >> 20 == READ) {
                 printf("L1C to WB: Hit, Read(%s)\n", frontItem->address);
                 enqueueL1CToL1WB(NULL,
                                  frontItem->address,
@@ -211,6 +217,11 @@ void processCPUToL1C() {
                                  frontItem->instruction,
                                  WRITE);
             }
+        } else if (inL1Cache == BUSY) { // Cache busy
+            enqueueL1Temp(frontItem->data,
+                          frontItem->address,
+                          frontItem->instruction,
+                          frontItem->opCode);
         } else { // Cache miss
             if (inL1Cache == MISS_D) {
                 // TODO: Put request on hold if the rows is waiting for other data.

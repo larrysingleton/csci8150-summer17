@@ -26,13 +26,9 @@ void processMemTemp() {
             }
             deleteMemTemp(frontItem->address);
         } else { // Still transferring data.
-            frontItem->delay = frontItem->delay - 1;
+            frontItem->delay--;
         }
-        if(frontItem->next != frontItem) {
-            frontItem = frontItem->next;
-        } else {
-            frontItem = NULL;
-        }
+        frontItem = frontItem->next;
     }
 }
 

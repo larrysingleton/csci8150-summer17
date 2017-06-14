@@ -9,7 +9,7 @@ do
 
     echo -n "Checking $test..."
     result=`diff $test benchmark/$test`
-    if [ ${#result} -eq 0 ]
+    if [ $? -eq 0 -a ${#result} -eq 0 ]
     then
         echo "passed"
     else
